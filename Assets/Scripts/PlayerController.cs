@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float MoveSpeed;
+    public float MoveAcceleration;
     public float RotationSpeed;
 
     public GameObject cinemachineTarget;
@@ -49,8 +50,20 @@ public class PlayerController : MonoBehaviour
     }
     private void Move()
     {
-        currentMoveSpeed = MoveSpeed * movementInput.magnitude;
+        float targetSpeed = MoveSpeed;
+        if (movementInput == Vector2.zero) targetSpeed = 0.0f;
+
+        float prevHorizSpeed = new Vector3(controller.velocity.x, 0.0f, controller.velocity.z).magnitude;
+        if (prevHorizSpeed < targetSpeed - 0.1f || prevHorizSpeed > targetSpeed + 0.1f)
+        {
+            currentMoveSpeed = Mathf.Lerp(prevHorizSpeed, targetSpeed, Time.deltaTime * MoveAcceleration);
+        }
+        else
+        {
+            currentMoveSpeed = targetSpeed;
+        }
         Vector3 moveDirection = new Vector3(movementInput.x,0.0f,movementInput.y).normalized;
+        if (movementInput != Vector2.zero) moveDirection = transform.right * movementInput.x + transform.forward * movementInput.y; 
         controller.Move(moveDirection * (currentMoveSpeed * Time.deltaTime));
     }
     private void Look()
