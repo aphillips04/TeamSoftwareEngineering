@@ -94,7 +94,7 @@
                     "id": "d6917120-f1cb-4c4f-b6aa-4b9c6c2776b0",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "InvertVector2(invertX=false)",
                     "groups": "Default",
                     "action": "Look",
                     "isComposite": false,
