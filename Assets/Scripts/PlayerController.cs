@@ -5,13 +5,18 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float Speed;
-    private float movementX,movementY;
-    private Rigidbody rb;
+    public float MoveSpeed;
+
+    private float currentSpeed;
+
+    private Vector2 movementInput;
+    private Vector2 lookInput;
+    private CharacterController controller;
+    
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -21,14 +26,23 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-        rb.AddForce(movement * Speed);
+
     }
-    public void OnMove(InputValue movementValue)
+    public void OnMove(InputValue val)
     {
-        
-        Vector2 movementVector = movementValue.Get<Vector2>();
-        movementX = movementVector.x;
-        movementY = movementVector.y;
+        movementInput = val.Get<Vector2>();
+    }
+    public void OnLook(InputValue val)
+    {
+        lookInput = val.Get<Vector2>();
+    }
+    private void Move()
+    {
+        Vector3 moveDirection = new Vector3(movementInput.x,0.0f,movementInput.y).normalized;
+        controller.Move(moveDirection * (currentSpeed * Time.deltaTime));
+    }
+    private void Look()
+    {
+
     }
 }
