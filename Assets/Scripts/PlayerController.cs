@@ -22,11 +22,14 @@ public class PlayerController : MonoBehaviour
     private Vector2 lookInput;
     private CharacterController controller;
     private GameObject mainCamera;
+
+    private ToolPoke ActiveTool;
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        this.ActiveTool = GetComponent<ToolPoke>();
     }
 
     // Update is called once per frame
@@ -38,6 +41,17 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
 
+    }
+    public void UseTool()
+    {
+        Ray r = new Ray(transform.position,mainCamera.transform.forward);
+        ActiveTool.Use(r);
+
+    }
+    public void OnUse()
+    {
+        //Debug.Log("Leftclick");
+        UseTool();
     }
     public void OnMove(InputValue val)
     {
