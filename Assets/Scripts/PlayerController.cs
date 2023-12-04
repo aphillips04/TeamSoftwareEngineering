@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Leftclick");
         UseTool();
     }
+    public void OnSwitchTool()
+    {
+        //change tool
+    }
     public void OnMove(InputValue val)
     {
        // Debug.Log("Movement input received");
