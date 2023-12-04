@@ -17,14 +17,12 @@ public class ToolPoke : MonoBehaviour
     }
     public void Use(Ray r)
     {
-        //Debug.Log("Using tool");
         if(Physics.SphereCast(r, 2f,out RaycastHit hit, 10f))
         {
             if (hit.collider.CompareTag("Alien"))
             {
                 hit.collider.SendMessage("React");
             }
-            //Debug.Log(hit.collider.name);
         }
 
     }

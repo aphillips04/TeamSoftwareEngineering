@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnUse()
     {
-        //Debug.Log("Leftclick");
+        Debug.Log("Leftclick");
         UseTool();
     }
     public void OnMove(InputValue val)
