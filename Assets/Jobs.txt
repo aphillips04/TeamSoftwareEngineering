@@ -1,0 +1,10 @@
+Jonny
+	- Player side and room
+	- Use of the action/"tool"
+	- Basic UI
+	- Basic room construction and doors
+
+Alex
+	- Finish up the Alien class
+	- Implementing basic emotion system
+	- Reactions to actions/"tools"

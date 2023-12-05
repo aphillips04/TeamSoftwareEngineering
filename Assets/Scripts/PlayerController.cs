@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private GameObject mainCamera;
 
     private ToolPoke ActiveTool;
+    private Tool[] ToolInventory;
     // Start is called before the first frame update
     void Start()
     {
