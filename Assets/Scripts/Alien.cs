@@ -20,17 +20,6 @@ public class Alien : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // switch cases for level of the emtion
-        if (calmness > 0.9)
-        {
-            //do smth
-        } else if (calmness > 0.7)
-        {
-            //do smth else
-        }
-
-
-
         skinMat.SetColor("_Color",SkinColour);
         exampleTimer -= Time.deltaTime;
         if (exampleTimer > 0)
