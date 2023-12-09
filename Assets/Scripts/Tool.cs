@@ -11,11 +11,19 @@ public enum Tools
     Oscilliscope,
 }
 
-    public abstract class Tool : MonoBehaviour
+public  class Tool : MonoBehaviour
 {
-    public abstract Tools toolType {  get; }
+    public  Tools toolType {  get; }
 
-    // THIS WILL PROBABLY LATER BECOME A PARENT CLASS/ SCRIPTABLEOBJECT BUT NOT RIGHT NOW COS IM JUST MAKING A SIMPLE EXAMPLE
-    public abstract void Use();
+    public void Use(Ray r)
+    {
+        if (Physics.SphereCast(r, 2f, out RaycastHit hit, 10f))
+        {
+            if (hit.collider.CompareTag("Alien"))
+            {
+                hit.collider.SendMessage("React", this);
+            }
+        }
+    }
 }
 

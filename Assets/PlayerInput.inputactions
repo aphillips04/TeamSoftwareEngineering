@@ -42,13 +42,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SwitchTool",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "9466993a-5ac7-4339-baad-7499b85fb1dc",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "HotbarScroll",
+                    "type": "Value",
+                    "id": "e76aa8f4-d929-44a2-90cc-cdad93dbcabd",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -147,7 +156,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SwitchTool",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b416089a-d7a7-4bc1-a438-82da301990cd",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HotbarScroll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

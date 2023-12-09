@@ -362,6 +362,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c3e2b634fc0e14b926a29fbeac9948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alienType: 0
+  happiness: 5
+  calmness: 5
 --- !u!1 &339695774
 GameObject:
   m_ObjectHideFlags: 0
@@ -1297,7 +1300,6 @@ GameObject:
   - component: {fileID: 2063227532}
   - component: {fileID: 2063227533}
   - component: {fileID: 2063227534}
-  - component: {fileID: 2063227535}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -1441,8 +1443,8 @@ MonoBehaviour:
   MoveAcceleration: 10
   RotationSpeed: 0.3
   cinemachineTarget: {fileID: 1342313955}
-  CineTopClamp: 90
-  CineBottomClamp: -90
+  ToolInventory:
+  - {fileID: 0}
 --- !u!143 &2063227534
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1469,18 +1471,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2063227535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2063227526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d1747e01873fcb469997805f221bc51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
