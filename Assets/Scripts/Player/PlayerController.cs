@@ -33,16 +33,21 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private GameObject mainCamera;
     private Tool ActiveTool;
+    private PlayerUIManager UI;
 
-    [Tooltip("Array of all possible tools the player can have")]
-    public Tool[] ToolInventory;
+    [Tooltip("List of all possible tools the player can have")]
+    public List<Tool> ToolInventory;
     // Start is called before the first frame update
     #region unityMethods
     void Start()
     {
         controller = GetComponent<CharacterController>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        
+        UI = GetComponent<PlayerUIManager>();
+        ToolInventory.Add(GetComponent<Tool>());
         this.ActiveTool = ToolInventory[0];
+        UI.ToolInventory = ToolInventory;
     }
 
     // Update is called once per frame
@@ -104,6 +109,7 @@ public class PlayerController : MonoBehaviour
         // PLEASE REMEMBER THIS *WILL* CAUSE OUTOFRANGE EXCEPTIONS
         // CHANGE IT SOON
         ActiveTool = ToolInventory[slotsToMove];
+
     }
     private void Move()
     {

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public enum Tools
 {
     Touch_Gently,
@@ -13,7 +14,8 @@ public enum Tools
 
 public  class Tool : MonoBehaviour
 {
-    public  Tools toolType {  get; }
+
+    public Tools toolType;
 
     public void Use(Ray r)
     {
