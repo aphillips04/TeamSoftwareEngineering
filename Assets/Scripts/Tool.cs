@@ -9,12 +9,11 @@ public enum Tools
     Touch_Roughly,
     Feed_Treat,
     Feed_LiveAnimal,
-    Oscilliscope,
+    Item_Oscilliscope,
 }
 
 public  class Tool : MonoBehaviour
 {
-
     public Tools toolType;
 
     public void Use(Ray r)

@@ -90,7 +90,7 @@ public class Alien : MonoBehaviour
             else if (alienType == AlienType.Mammal) // NOT DECIDED YET
                 return;
         }
-        else if (tool.toolType == Tools.Oscilliscope)
+        else if (tool.toolType == Tools.Item_Oscilliscope)
         {
         }
     }
