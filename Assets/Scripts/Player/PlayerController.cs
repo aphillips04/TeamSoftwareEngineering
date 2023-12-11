@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -43,11 +44,12 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        
+
         UI = GetComponent<PlayerUIManager>();
-        ToolInventory.Add(GetComponent<Tool>());
+        AddAllTools();
         this.ActiveTool = ToolInventory[0];
         UI.ToolInventory = ToolInventory;
+        UI.InitHotbar(); // I wanted to do this in start() of UIManager but the inventory NEEDS to be initalised first 
     }
 
     // Update is called once per frame
@@ -153,5 +155,14 @@ public class PlayerController : MonoBehaviour
     private void OnApplicationFocus(bool hasFocus)
     {
         Cursor.lockState = hasFocus ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+    private void AddAllTools()
+    {
+        foreach(Tools enumVal in Enum.GetValues(typeof(Tools)) )
+        {
+            Tool t = gameObject.AddComponent<Tool>();
+            t.toolType = enumVal;
+            ToolInventory.Add(t);
+        }
     }
 }

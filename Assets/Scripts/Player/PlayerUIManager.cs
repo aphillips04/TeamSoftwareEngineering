@@ -3,35 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PlayerUIManager : MonoBehaviour
 {
     public GameObject HotbarPrefab;
     public Canvas UI;
     public Vector2 HotbarCenter;
     public List<Tool> ToolInventory;
-    private GameObject asda;
+    public List<GameObject> Hotbar;
+    public float BoxWidth;
     // Start is called before the first frame update
     void Start()
     {
         //Debug.Log("Hello World!");
-        DrawHotbar();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        DrawHotbar();
  
-        asda.transform.localPosition = HotbarCenter;
     }
     void DrawHotbar()
     {
-       // foreach(Tool tool in ToolInventory)
+        int HotbarCount = ToolInventory.Count;
+        float HotbarHalfWidth;
+        if (HotbarCount % 2 == 0)
         {
-            asda = Instantiate(HotbarPrefab, UI.transform);
-            asda.SendMessage("SelectToolIcon", Tools.Touch_Gently);
-            //asda.transform.position = HotbarCenter;
+             HotbarHalfWidth = HotbarCount * BoxWidth * 0.5f;
+            
         }
-        
+        else
+        {
+            HotbarHalfWidth =  Mathf.Floor(HotbarCount / 2) * BoxWidth;
+        }
+        float HotbarStart = HotbarCenter.x - HotbarHalfWidth;
+        for (int i = 0; i < HotbarCount; i++)
+        {
+            Hotbar[i].transform.localPosition = new Vector2(HotbarStart + BoxWidth * i, HotbarCenter.y);
+        }
+    }
+    public void InitHotbar()
+    {
+        foreach (Tool tool in ToolInventory)
+        {
+            GameObject g = Instantiate(HotbarPrefab, UI.transform);
+            Hotbar.Add(g);
+        }
     }
     
 }
