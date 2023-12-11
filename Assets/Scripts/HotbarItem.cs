@@ -46,7 +46,7 @@ public class HotbarItem : MonoBehaviour
             case Tools.Feed_LiveAnimal:
                 icon.sprite = AllIcons[3];
                 break;
-            case Tools.Oscilliscope:
+            case Tools.Item_Oscilliscope:
                 icon.sprite = AllIcons[4];
                 break;
         }
