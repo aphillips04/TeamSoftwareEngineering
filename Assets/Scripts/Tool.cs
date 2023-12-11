@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 public enum Tools
@@ -18,7 +19,9 @@ public  class Tool : MonoBehaviour
 
     public void Use(Ray r)
     {
-        if (Physics.SphereCast(r, 2f, out RaycastHit hit, 10f))
+        Debug.Log(String.Format("Used tool {0}", toolType));
+        Debug.DrawRay(r.origin,r.direction,Color.red,2f);
+        if (Physics.Raycast(r, out RaycastHit hit, 10f))
         {
             if (hit.collider.CompareTag("Alien"))
             {
@@ -26,5 +29,6 @@ public  class Tool : MonoBehaviour
             }
         }
     }
+
 }
 

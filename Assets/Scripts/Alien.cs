@@ -54,7 +54,7 @@ public class Alien : MonoBehaviour
     /// </summary>
     void React(Tool tool)
     {
-        //Debug.Log("reacted to", tool);
+        Debug.Log(String.Format("reacted to {0}", tool.toolType));
         if (tool.toolType == Tools.Touch_Gently)
         {
             if (alienType == AlienType.Star)
