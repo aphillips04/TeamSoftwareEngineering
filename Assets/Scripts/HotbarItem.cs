@@ -51,4 +51,14 @@ public class HotbarItem : MonoBehaviour
                 break;
         }
     }
+    public void Activate()
+    {
+        //Debug.Log("Higlighted new box");
+        isHighlighted = true;
+    }
+    public void Deactivate()
+    {
+        //Debug.Log("Unhighlighted box");
+        isHighlighted = false;
+    }
 }

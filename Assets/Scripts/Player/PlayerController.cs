@@ -34,6 +34,20 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private GameObject mainCamera;
     private Tool ActiveTool;
+    private int _toolIndex;
+    private int ToolIndex
+    {
+        get { return _toolIndex; }
+        set
+        {
+            while (value < 0)
+            {
+                //not sure this is the best but it works
+                value+= ToolInventory.Count;
+            }
+            _toolIndex = value % ToolInventory.Count;
+        }
+    }
     private PlayerUIManager UI;
 
     [Tooltip("List of all possible tools the player can have")]
@@ -108,10 +122,10 @@ public class PlayerController : MonoBehaviour
     #endregion
     private void SwitchTool(int slotsToMove)
     {
-        // PLEASE REMEMBER THIS *WILL* CAUSE OUTOFRANGE EXCEPTIONS
-        // CHANGE IT SOON
-        ActiveTool = ToolInventory[slotsToMove];
-
+        ToolIndex += slotsToMove;
+        UI.ActiveIndex = ToolIndex;
+        ActiveTool = ToolInventory[ToolIndex];
+        
     }
     private void Move()
     {

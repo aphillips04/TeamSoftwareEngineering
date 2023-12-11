@@ -12,6 +12,18 @@ public class PlayerUIManager : MonoBehaviour
     public List<Tool> ToolInventory;
     public List<GameObject> Hotbar;
     public float BoxWidth;
+    private int _activeIndex;
+    public int ActiveIndex
+    {
+        get { return _activeIndex; }
+        set
+        {
+            Hotbar[_activeIndex].SendMessage("Deactivate");
+            _activeIndex = value;
+            Hotbar[_activeIndex].SendMessage("Activate");
+        }
+
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +55,7 @@ public class PlayerUIManager : MonoBehaviour
         {
             Hotbar[i].transform.localPosition = new Vector2(HotbarStart + BoxWidth * i, HotbarCenter.y);
         }
+        
     }
     public void InitHotbar()
     {
