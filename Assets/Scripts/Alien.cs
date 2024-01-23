@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.AI;
 
 
 public class Alien : MonoBehaviour
@@ -10,12 +11,16 @@ public class Alien : MonoBehaviour
     [Range(0, 10)]
     public int happiness = 5, calmness = 5; // Higher is happier, higher is calmer
 
+    private NavMeshAgent nav;
+    public Transform HomeSpot;
+
     /// <summary>
     /// Start is the initial setup function, called before the first frame update
     /// </summary>
     void Start()
     {
-        return;
+        nav = GetComponent<NavMeshAgent>();
+        nav.SetDestination(HomeSpot.position);
     }
 
     /// <summary>
