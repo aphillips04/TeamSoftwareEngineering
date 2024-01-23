@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("Layers that count as ground the player can jump off")]
     public LayerMask GroundLayers;
-
+    [Tooltip("Layers that count as the player itself")]
+    public LayerMask PlayerLayers;
     //top and bottom limits for looking, shouldn't need changing in editor
     private float CineTopClamp = 90.0f;
     private float CineBottomClamp = -90.0f;
@@ -85,7 +86,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Grounded());
+        //Debug.Log(Grounded());
         JumpAndGravity();
         Move();
         Look();
@@ -108,10 +109,12 @@ public class PlayerController : MonoBehaviour
     }
     public void OnInteract()
     {
+        //Debug.Log("E");
         Ray r = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
-        if (Physics.SphereCast(r, 2f, out RaycastHit hit, 10f))
+        Debug.DrawRay(r.origin, r.direction, Color.green, 2.5f);
+        if (Physics.Raycast(r, out RaycastHit hit, 2.5f,~PlayerLayers))
         {
-            hit.collider.SendMessage("PlayerInteract");
+            hit.collider.SendMessage("OnPlayerInteract");
             //anything you can press "e" on will have a public funtion OnPlayerInteract that will do whatever it needs to when pressed
         }
     }
