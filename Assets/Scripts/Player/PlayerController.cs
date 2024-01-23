@@ -13,9 +13,18 @@ public class PlayerController : MonoBehaviour
     public float MoveAcceleration;
     [Tooltip("Constant for player movement")]
     public float RotationSpeed;
+    [Tooltip("Constant for player jump")]
+    public float JumpHeight = 1.2f;
+    [Tooltip("Constant for player gravity")]
+    public float Gravity = -9.81f;
+    [Tooltip("Constant for player terminal velocity")]
+    public float TerminalVelocity = 50f;
 
     [Tooltip("Reference to the empty on the player that the camera will follow")]
     public GameObject cinemachineTarget;
+
+    [Tooltip("Layers that count as ground the player can jump off")]
+    public LayerMask GroundLayers;
 
     //top and bottom limits for looking, shouldn't need changing in editor
     private float CineTopClamp = 90.0f;
@@ -25,10 +34,13 @@ public class PlayerController : MonoBehaviour
 
     private float currentMoveSpeed;
     private float currentRotationSpeed;
+    private float currentVerticalVelocity;
+
 
     //input
     private Vector2 movementInput;
     private Vector2 lookInput;
+    private bool jumpInput;
 
     //components
     private CharacterController controller;
@@ -52,6 +64,10 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("List of all possible tools the player can have")]
     public List<Tool> ToolInventory;
+
+
+    //debug
+    Vector3 groundedSpherePos;
     // Start is called before the first frame update
     #region unityMethods
     void Start()
@@ -69,6 +85,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(Grounded());
+        JumpAndGravity();
         Move();
         Look();
     }
@@ -119,6 +137,10 @@ public class PlayerController : MonoBehaviour
     {
         lookInput = val.Get<Vector2>();
     }
+    public void OnJump(InputValue val)
+    {
+        jumpInput = val.isPressed;
+    }
     #endregion
     private void SwitchTool(int slotsToMove)
     {
@@ -143,7 +165,7 @@ public class PlayerController : MonoBehaviour
         }
         Vector3 moveDirection = new Vector3(movementInput.x,0.0f,movementInput.y).normalized;
         if (movementInput != Vector2.zero) moveDirection = transform.right * movementInput.x + transform.forward * movementInput.y; 
-        controller.Move(moveDirection * (currentMoveSpeed * Time.deltaTime));
+        controller.Move(moveDirection * (currentMoveSpeed * Time.deltaTime) + new Vector3(0f,currentVerticalVelocity) * Time.deltaTime);
     }
     private void Look()
     {
@@ -153,6 +175,40 @@ public class PlayerController : MonoBehaviour
         cineTargetPitch = ClampAngle(cineTargetPitch, CineBottomClamp, CineTopClamp);
         cinemachineTarget.transform.localRotation = Quaternion.Euler(cineTargetPitch, 0.0f, 0.0f);
         transform.Rotate(Vector3.up * currentRotationSpeed);
+    }
+    private void JumpAndGravity()
+    {
+        if (Grounded())
+        {
+            //stopfall
+            //allow jumping
+            //clamp vertical velocity when grounded
+            if (currentVerticalVelocity < 0.0f)
+            {
+                currentVerticalVelocity = -2f;
+            }
+            if (jumpInput)
+            {
+                //this maths is straight from FPSexample I haven't checked it at all
+
+                // the square root of H * -2 * G = how much velocity needed to reach desired height
+                currentVerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            }
+        }
+        else
+        {
+            //apply falling
+            if (currentVerticalVelocity < TerminalVelocity)
+            {
+                currentVerticalVelocity += Gravity * Time.deltaTime;
+            }
+        }
+    }
+    private bool Grounded()
+    {
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y -1f, transform.position.z);
+        groundedSpherePos = spherePosition;
+        return Physics.CheckSphere(spherePosition, 0.5f, GroundLayers, QueryTriggerInteraction.Ignore); 
     }
     public void UseTool()
     {
@@ -178,5 +234,10 @@ public class PlayerController : MonoBehaviour
             t.toolType = enumVal;
             ToolInventory.Add(t);
         }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(groundedSpherePos, 0.5f);
     }
 }
