@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.AI;
+using System.Data;
 
 
 public class Alien : MonoBehaviour
@@ -10,17 +11,34 @@ public class Alien : MonoBehaviour
     public AlienType alienType;
     [Range(0, 10)]
     public int happiness = 5, calmness = 5; // Higher is happier, higher is calmer
+    [HideInInspector]
+    public float relationship
+    {
+        get { return (happiness + calmness) / 2; }
+        private set { }
+    }
 
     private NavMeshAgent nav;
     public Transform HomeSpot;
+
+    private new MeshRenderer renderer;
+    private PlayerUIManager UIManager;
 
     /// <summary>
     /// Start is the initial setup function, called before the first frame update
     /// </summary>
     void Start()
     {
+        renderer = GetComponent<MeshRenderer>();
+
         nav = GetComponent<NavMeshAgent>();
         nav.SetDestination(HomeSpot.position);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        // Wait until player ui manager is ready
+        UIManager = player.GetComponentInChildren<PlayerUIManager>();
+        UIManager.InitRelationshipBar(alienType);
+        UIManager.SetRelationshipBar(relationship);
     }
 
     /// <summary>
@@ -31,12 +49,12 @@ public class Alien : MonoBehaviour
         if (alienType == AlienType.Star)
         {
             // Set the colour of the alien based on its happiness
-            Color skinColour = new Color(
+            Color skinColour = new (
                 .65f + (happiness *  .035f), // The change is calculated through: (end - start) / (steps - 1)
                 .00f + (happiness *  .100f), // There are 11 steps of from 0 to 11
                 .65f + (happiness * -.065f)  // The start value was RGB(166, 0, 166), end value was RGB(255, 255, 0) 
             );
-            GetComponent<MeshRenderer>().material.color = skinColour;
+            renderer.material.color = skinColour;
 
             // Set the spin speed of the alien based on its calmness
         }
@@ -57,9 +75,9 @@ public class Alien : MonoBehaviour
     /// <summary>
     /// How the alien responds to the players action
     /// </summary>
-    void React(Tool tool)
+    public void React(Tool tool)
     {
-        Debug.Log(String.Format("reacted to {0}", tool.toolType));
+        Debug.Log(string.Format("reacted to {0}", tool.toolType));
         if (tool.toolType == Tools.Touch_Gently)
         {
             if (alienType == AlienType.Star)
@@ -99,5 +117,8 @@ public class Alien : MonoBehaviour
         else if (tool.toolType == Tools.Item_Oscilliscope)
         {
         }
+
+        // Update the UI
+        UIManager.UpdateRelationshipBar(relationship);
     }
 }

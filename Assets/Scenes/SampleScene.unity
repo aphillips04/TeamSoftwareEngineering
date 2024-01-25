@@ -1744,7 +1744,7 @@ GameObject:
   - component: {fileID: 2063227535}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1933,12 +1933,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b79eb8fa361ce14db8d97ed4f892f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HotbarPrefab: {fileID: 5874839650864259790, guid: 0eaa57c5ae6108446ae559447845e7eb, type: 3}
   UI: {fileID: 1677457177}
+  HotbarPrefab: {fileID: 5874839650864259790, guid: 0eaa57c5ae6108446ae559447845e7eb, type: 3}
   HotbarCenter: {x: 0, y: -492}
+  BoxWidth: 100
   ToolInventory: []
   Hotbar: []
-  BoxWidth: 100
+  ProgressBarPrefab: {fileID: 2651463470120337713, guid: 0cb669d4cb1e3a44dbec0d3b9c035928, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
