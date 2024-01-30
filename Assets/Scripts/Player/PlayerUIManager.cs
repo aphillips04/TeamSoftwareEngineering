@@ -8,7 +8,8 @@ using static Alien;
 
 public class PlayerUIManager : MonoBehaviour
 {
-    public Canvas UI;
+    public Canvas MainUI;
+    public Canvas BookUI;
     [Header("Hotbar")]
     public GameObject HotbarPrefab;
     public Vector2 HotbarCenter;
@@ -35,6 +36,8 @@ public class PlayerUIManager : MonoBehaviour
     void Start()
     {
         //Debug.Log("Hello World!");
+        MainUI.enabled = true;
+        BookUI.enabled = false;
     }
 
     // Update is called once per frame
@@ -56,7 +59,7 @@ public class PlayerUIManager : MonoBehaviour
     {
         foreach (Tool tool in ToolInventory)
         {
-            GameObject g = Instantiate(HotbarPrefab, UI.transform);
+            GameObject g = Instantiate(HotbarPrefab, MainUI.transform);
             g.SendMessage("SelectToolIcon", tool.toolType);
             Hotbar.Add(g);
         }
@@ -102,7 +105,7 @@ public class PlayerUIManager : MonoBehaviour
                 break;
         }
 
-        GameObject bar = Instantiate(ProgressBarPrefab, UI.transform);
+        GameObject bar = Instantiate(ProgressBarPrefab, MainUI.transform);
         foreach (Image child in bar.GetComponentsInChildren<Image>())
         {
             switch (child.name)
@@ -131,5 +134,18 @@ public class PlayerUIManager : MonoBehaviour
     {
         targetFill = (float)Math.Round(relationship / 10, 2, MidpointRounding.AwayFromZero);
         RelationshipFill.fillAmount = targetFill;
+    }
+    public void ToggleUI()
+    {
+        if (MainUI.enabled)
+        {
+            MainUI.enabled = false;
+            BookUI.enabled = true;
+        }
+        else
+        {
+            MainUI.enabled = true;
+            BookUI.enabled = false;
+        }
     }
 }

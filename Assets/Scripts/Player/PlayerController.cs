@@ -144,6 +144,10 @@ public class PlayerController : MonoBehaviour
     {
         jumpInput = val.isPressed;
     }
+    public void OnOpenBook()
+    {
+        UI.ToggleUI();
+    }
     #endregion
     private void SwitchTool(int slotsToMove)
     {
