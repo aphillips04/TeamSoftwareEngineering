@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Alien
+  - StarEye
   layers:
   - Default
   - TransparentFX

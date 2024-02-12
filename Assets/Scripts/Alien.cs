@@ -9,8 +9,15 @@ public class Alien : MonoBehaviour
     // Alien configuration variables
     public enum AlienType { Star, Insect, Mammal }
     public AlienType alienType;
-    [Range(0, 10)]
-    public int happiness = 5, calmness = 5; // Higher is happier, higher is calmer
+    //[Range(0, 10)]
+
+    public int happiness
+    {
+        get { return _happiness; }
+        set { if (value <= 0) _happiness = 1; else _happiness = value; }
+    }
+    private int _happiness;
+    public int calmness = 5; // Higher is happier, higher is calmer
     [HideInInspector]
     public float relationship
     {
@@ -29,8 +36,15 @@ public class Alien : MonoBehaviour
     /// </summary>
     void Start()
     {
-        renderer = GetComponent<MeshRenderer>();
-
+        if(alienType == AlienType.Star) {
+            MeshRenderer[] renderCandidates = GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer render in renderCandidates)
+            {
+                if (render.CompareTag("StarEye"))
+                    renderer = render;
+            }
+        }
+        happiness = 5;
         nav = GetComponent<NavMeshAgent>();
         nav.SetDestination(HomeSpot.position);
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -55,7 +69,7 @@ public class Alien : MonoBehaviour
                 .65f + (happiness * -.065f)  // The start value was RGB(166, 0, 166), end value was RGB(255, 255, 0) 
             );
             renderer.material.color = skinColour;
-
+            
             // Set the spin speed of the alien based on its calmness
         }
         else if (alienType == AlienType.Insect)
@@ -71,7 +85,29 @@ public class Alien : MonoBehaviour
             // Set how much its tail is coiled based on its calmness
         }
     }
-
+     void FixedUpdate()
+    {
+        if (alienType == AlienType.Star)
+        {
+            DoStarBobbing();
+            DoStarSpin();
+        }
+        else if (alienType == AlienType.Insect)
+        {
+        }
+        else if (alienType == AlienType.Mammal)
+        {
+            
+        }
+    }
+    void DoStarBobbing()
+    {
+        transform.position += Vector3.up * 0.01f *  Mathf.Sin( 2 * Time.time);
+    }
+    void DoStarSpin()
+    {
+        transform.Rotate(Vector3.right, 10/happiness,Space.Self);
+    }
     /// <summary>
     /// How the alien responds to the players action
     /// </summary>
