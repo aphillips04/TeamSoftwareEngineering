@@ -1,0 +1,4 @@
+currently the tool raycast sees the alien no matter where you look for some reason
+
+
+I *think* the rotation on the alien is gonna fuck with the navmeshagent - not sure yet
