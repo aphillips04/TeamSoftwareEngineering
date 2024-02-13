@@ -31,7 +31,7 @@ public class PlayerUIManager : MonoBehaviour
     public GameObject ProgressBarPrefab;
     private Image RelationshipFill;
     private float targetFill;
-
+    private bool CursorLock = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -141,11 +141,19 @@ public class PlayerUIManager : MonoBehaviour
         {
             MainUI.enabled = false;
             BookUI.enabled = true;
+            CursorLock = false;
         }
         else
         {
             MainUI.enabled = true;
             BookUI.enabled = false;
+            CursorLock = true;
         }
+        Cursor.lockState = GetCursorMode();
+    }
+    //
+    public CursorLockMode GetCursorMode()
+    {
+        return CursorLock ? CursorLockMode.Locked : CursorLockMode.Confined;
     }
 }

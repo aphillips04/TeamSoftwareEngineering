@@ -158,6 +158,8 @@ public class PlayerController : MonoBehaviour
     }
     private void Move()
     {
+        if (Cursor.lockState == CursorLockMode.Confined)
+            return;
         float targetSpeed = MoveSpeed;
         if (movementInput == Vector2.zero) targetSpeed = 0.0f;
 
@@ -176,6 +178,8 @@ public class PlayerController : MonoBehaviour
     }
     private void Look()
     {
+        if (Cursor.lockState == CursorLockMode.Confined)
+            return;
         cineTargetPitch += lookInput.y * RotationSpeed;
         currentRotationSpeed = lookInput.x * RotationSpeed;
 
@@ -231,7 +235,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnApplicationFocus(bool hasFocus)
     {
-        Cursor.lockState = hasFocus ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.lockState = hasFocus ? UI.GetCursorMode() : CursorLockMode.None; 
     }
     private void AddAllTools()
     {
