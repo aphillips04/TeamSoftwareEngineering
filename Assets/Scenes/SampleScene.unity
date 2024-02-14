@@ -296,13 +296,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2858027892948262308, guid: 76649bbb6ca917d4cb93c1fa58b473a7, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Alien
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 76649bbb6ca917d4cb93c1fa58b473a7, type: 3}
       propertyPath: m_Name
       value: StarAlien
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 76649bbb6ca917d4cb93c1fa58b473a7, type: 3}
+      propertyPath: m_TagString
+      value: Alien
+      objectReference: {fileID: 0}
+    - target: {fileID: 8347006329004459674, guid: 76649bbb6ca917d4cb93c1fa58b473a7, type: 3}
       propertyPath: m_TagString
       value: Alien
       objectReference: {fileID: 0}
@@ -659,7 +663,7 @@ GameObject:
   - component: {fileID: 339695777}
   - component: {fileID: 339695776}
   m_Layer: 3
-  m_Name: Eye
+  m_Name: PlayerEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
