@@ -23,6 +23,7 @@ public class Tool : MonoBehaviour
         Debug.DrawRay(r.origin, r.direction * 40f, Color.red, 2f);
         if (Physics.Raycast(r, out RaycastHit hit, 40f,ignorePlayerMask))
         {
+            //this is still broken - the layer masking didn't work - i'm not entirely sure whats going on
             Debug.Log(hit.collider.gameObject.layer);
             Debug.Log(hit.collider.tag);
             Debug.Log(hit.collider.name);

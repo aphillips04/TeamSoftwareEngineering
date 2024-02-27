@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static Alien;
+
 
 
 public class PlayerUIManager : MonoBehaviour
@@ -85,25 +85,10 @@ public class PlayerUIManager : MonoBehaviour
 
     }
 
-    public void InitRelationshipBar(AlienType alienType)
+    public void InitRelationshipBar()
     {
         Color background = new Color(.267f, .267f, .267f);
-        Color fill;
-        switch (alienType)
-        {
-            case AlienType.Star:
-                fill = Color.green;
-                break;
-            case AlienType.Insect:
-                fill = Color.yellow;
-                break;
-            case AlienType.Mammal:
-                fill = Color.red;
-                break;
-            default:
-                fill = Color.white;
-                break;
-        }
+        Color fill = Color.white;
 
         GameObject bar = Instantiate(ProgressBarPrefab, MainUI.transform);
         foreach (Image child in bar.GetComponentsInChildren<Image>())
