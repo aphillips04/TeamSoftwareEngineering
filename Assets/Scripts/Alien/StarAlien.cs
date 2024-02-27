@@ -5,7 +5,7 @@ using System.Data;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
-public class StarAlien : MonoBehaviour, IAlien
+public class StarAlien : Alien
 {
     #region legacyMembers
     public int happiness
@@ -23,29 +23,29 @@ public class StarAlien : MonoBehaviour, IAlien
     }
     #endregion
 
-    enum EmotionsEnum {Happiness,Calmness,Fear,Anger } //just examples for now
-    private Dictionary<EmotionsEnum, double> Emotions = new Dictionary<EmotionsEnum, double>();
+    
+    //private Dictionary<EmotionsEnum, double> Emotions = new Dictionary<EmotionsEnum, double>();
     //this is a dictionary here but using an enum I suppose you could also assign each one an int value (in the enum) and then it can be a straight array
     //not entirely sure this is an important implementation decision
     //but *technically* we don't *need* a dictionary since we only need to store one float per member of the enum and that is all known at compile time
     //I think i'm just trying to over-optimise (getting a bit c++ brained with arrays vs "real" generic containers)
 
+
+    //navmesh could be moved to parent too
     private NavMeshAgent nav;
     public Transform HomeSpot;
 
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
 
-    private bool needNewAction = true;
-    private delegate bool Action();
-    private Action currentAction;
-    private float actionTimer;
+    
+    
     #region unityMethods
     /// <summary>
     /// Start is the initial setup function, called before the first frame update
     /// </summary>
     /// 
-    void Start()
+    public override void Start()
     {
        
         MeshRenderer[] renderCandidates = GetComponentsInChildren<MeshRenderer>();
@@ -71,7 +71,7 @@ public class StarAlien : MonoBehaviour, IAlien
     /// <summary>
     /// Update is the objects game loop function, called once per frame
     /// </summary>
-    void Update()
+    public override void Update()
     {
 
         // Set the colour of the alien based on its happiness
@@ -84,14 +84,7 @@ public class StarAlien : MonoBehaviour, IAlien
 
         // Set the spin speed of the alien based on its calmness
 
-        if (needNewAction)
-        {
-            ChooseAction();
-        }
-        else
-        {
-            needNewAction = currentAction();//will return true and therefore set the game to pick a new action next frame
-        }
+        
     }
      void FixedUpdate()
     {
@@ -113,9 +106,9 @@ public class StarAlien : MonoBehaviour, IAlien
     #endregion
 
     
-    #region IAlien
-    //IAlien
-    public void React(Tool tool)
+    #region Virtuals
+    //From parent clas
+    override public void React(Tool tool)
     {
         Debug.Log(string.Format("reacted to {0}", tool.toolType));
         if (tool.toolType == Tools.Touch_Gently)
@@ -140,20 +133,20 @@ public class StarAlien : MonoBehaviour, IAlien
         // Update the UI
         UIManager.UpdateRelationshipBar(relationship);
     }
+    protected override void InitActions()
+    {
+        throw new NotImplementedException();
+    }
+    protected override void UpdateWeights()
+    {
+        throw new NotImplementedException();
+    }
     #endregion
 
     /// <summary>
     /// How the alien responds to the players action
     /// </summary>
-    private void ChooseAction()
-    {
-        //based on emotion pick action
-       //weighted decision needs to be made here
-       //I've seen some examples online of full on WeightedList<T,int> implementations - not entirely sure whether that's necessary 
 
-
-
-    }
 
 
     //down here we need actions
@@ -163,10 +156,12 @@ public class StarAlien : MonoBehaviour, IAlien
     #region actions
     bool Idle()
     {
+        const float IdleTimerMin = 1.0f;
         const float IdleTimerMax = 5.0f;
+        
         if (needNewAction) // on first call - set yourself as the active action
         { 
-            actionTimer = Random.value * IdleTimerMax; // timer between 0 and 5 seconds
+            actionTimer = Random.Range(IdleTimerMin, IdleTimerMax); // timer between 0 and 5 seconds
             needNewAction = false;
             currentAction = Idle;
         }
