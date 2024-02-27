@@ -2,10 +2,12 @@ using UnityEngine;
 using System;
 using UnityEngine.AI;
 using System.Data;
+using System.Collections.Generic;
 
 
 public class StarAlien : MonoBehaviour, IAlien
 {
+    #region legacyMembers
     public int happiness
     {
         get { return _happiness; }
@@ -19,6 +21,14 @@ public class StarAlien : MonoBehaviour, IAlien
         get { return (happiness + calmness) / 2; }
         private set { }
     }
+    #endregion
+
+    enum EmotionsEnum {Happiness,Calmness,Fear,Anger } //just examples for now
+    private Dictionary<EmotionsEnum, double> Emotions = new Dictionary<EmotionsEnum, double>();
+    //this is a dictionary here but using an enum I suppose you could also assign each one an int value (in the enum) and then it can be a straight array
+    //not entirely sure this is an important implementation decision
+    //but *technically* we don't *need* a dictionary since we only need to store one float per member of the enum and that is all known at compile time
+    //I think i'm just trying to over-optimise (getting a bit c++ brained with arrays vs "real" generic containers)
 
     private NavMeshAgent nav;
     public Transform HomeSpot;
@@ -26,9 +36,12 @@ public class StarAlien : MonoBehaviour, IAlien
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
 
+
+    #region unityMethods
     /// <summary>
     /// Start is the initial setup function, called before the first frame update
     /// </summary>
+    /// 
     void Start()
     {
        
@@ -67,13 +80,16 @@ public class StarAlien : MonoBehaviour, IAlien
             
         // Set the spin speed of the alien based on its calmness
         
-
+        //ChooseAction();
+        //Here we can choose the action - (as i deliberated about below we can either have update call the action directly or have ChooseAction() call out to the action if one isn't complete)
     }
      void FixedUpdate()
     {
         DoStarBobbing();
         DoStarSpin();
     }
+    #endregion
+    #region bobAndSpin
     void DoStarBobbing()
     {
         transform.position += Vector3.up * 0.01f *  Mathf.Sin( 2 * Time.time);
@@ -84,12 +100,10 @@ public class StarAlien : MonoBehaviour, IAlien
         //I think it just needs to rotate the child mesh instead of the parent empty
         transform.Rotate(Vector3.right, 10/happiness,Space.Self);
     }
-    /// <summary>
-    /// How the alien responds to the players action
-    /// </summary>
+    #endregion
 
-
-
+    
+    #region IAlien
     //IAlien
     public void React(Tool tool)
     {
@@ -113,8 +127,25 @@ public class StarAlien : MonoBehaviour, IAlien
         else if (tool.toolType == Tools.Item_Oscilliscope)
         {
         }
-
         // Update the UI
         UIManager.UpdateRelationshipBar(relationship);
     }
+    #endregion
+
+    /// <summary>
+    /// How the alien responds to the players action
+    /// </summary>
+    private void ChooseAction()
+    {
+        //based on emotion pick action
+        //maybe some sort of void* current action (well the c# equivalent - I vaguely remember it existing from OOP last year) -- this is necessary in chooseaction OR update
+        //if doing it that way each action can return a bool when done so we know when to choose another
+        //OR we can just pull into ChooseAction which can keep track of all that for us and switch to the right action -- this doesnt actually matter since it looks the same it's just where the code is
+        //thinking about it having a state of whether an action is currently being performed is pretty smart and we should prob do it anyway
+    }
+
+
+    //down here we need actions
+    //we will also need some way to vary the mood randomly based on the day
+    //perhaps with some sort of carryover based on previous day behaviour
 }
