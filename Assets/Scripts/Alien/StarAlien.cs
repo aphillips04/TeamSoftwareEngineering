@@ -3,7 +3,7 @@ using System;
 using UnityEngine.AI;
 using System.Data;
 using System.Collections.Generic;
-
+using Random = UnityEngine.Random;
 
 public class StarAlien : MonoBehaviour, IAlien
 {
@@ -36,7 +36,10 @@ public class StarAlien : MonoBehaviour, IAlien
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
 
-
+    private bool needNewAction = true;
+    private delegate bool Action();
+    private Action currentAction;
+    private float actionTimer;
     #region unityMethods
     /// <summary>
     /// Start is the initial setup function, called before the first frame update
@@ -62,6 +65,7 @@ public class StarAlien : MonoBehaviour, IAlien
         //relationship bar needs to be sorted (i think removed idk)
         UIManager.InitRelationshipBar();
         UIManager.SetRelationshipBar(relationship);
+        currentAction = Idle;
     }
 
     /// <summary>
@@ -77,11 +81,17 @@ public class StarAlien : MonoBehaviour, IAlien
             .65f + (happiness * -.065f)  // The start value was RGB(166, 0, 166), end value was RGB(255, 255, 0) 
         );
         renderer.material.color = skinColour;
-            
+
         // Set the spin speed of the alien based on its calmness
-        
-        //ChooseAction();
-        //Here we can choose the action - (as i deliberated about below we can either have update call the action directly or have ChooseAction() call out to the action if one isn't complete)
+
+        if (needNewAction)
+        {
+            ChooseAction();
+        }
+        else
+        {
+            needNewAction = currentAction();//will return true and therefore set the game to pick a new action next frame
+        }
     }
      void FixedUpdate()
     {
@@ -138,14 +148,36 @@ public class StarAlien : MonoBehaviour, IAlien
     private void ChooseAction()
     {
         //based on emotion pick action
-        //maybe some sort of void* current action (well the c# equivalent - I vaguely remember it existing from OOP last year) -- this is necessary in chooseaction OR update
-        //if doing it that way each action can return a bool when done so we know when to choose another
-        //OR we can just pull into ChooseAction which can keep track of all that for us and switch to the right action -- this doesnt actually matter since it looks the same it's just where the code is
-        //thinking about it having a state of whether an action is currently being performed is pretty smart and we should prob do it anyway
+       //weighted decision needs to be made here
+       //I've seen some examples online of full on WeightedList<T,int> implementations - not entirely sure whether that's necessary 
+
+
+
     }
 
 
     //down here we need actions
     //we will also need some way to vary the mood randomly based on the day
     //perhaps with some sort of carryover based on previous day behaviour
+
+    #region actions
+    bool Idle()
+    {
+        const float IdleTimerMax = 5.0f;
+        if (needNewAction) // on first call - set yourself as the active action
+        { 
+            actionTimer = Random.value * IdleTimerMax; // timer between 0 and 5 seconds
+            needNewAction = false;
+            currentAction = Idle;
+        }
+        //when timer up return true
+        if (actionTimer > IdleTimerMax)
+        {
+            return true;//returning true tells update that we need a new action
+        }
+        //idle does nothing
+        actionTimer += Time.deltaTime;
+        return false;
+    }
+    #endregion
 }
