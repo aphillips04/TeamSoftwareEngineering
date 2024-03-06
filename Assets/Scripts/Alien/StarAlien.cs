@@ -37,7 +37,7 @@ public class StarAlien : Alien
 
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
-
+    private Transform MeshTransform;
     
     
     #region unityMethods
@@ -47,7 +47,7 @@ public class StarAlien : Alien
     /// 
     public override void Start()
     {
-       
+        MeshTransform = transform.Find("StarMesh");
         MeshRenderer[] renderCandidates = GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer render in renderCandidates)
         {
@@ -58,6 +58,7 @@ public class StarAlien : Alien
         happiness = 5;
         nav = GetComponent<NavMeshAgent>();
         nav.SetDestination(HomeSpot.position);
+        
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
         // Wait until player ui manager is ready
@@ -95,13 +96,13 @@ public class StarAlien : Alien
     #region bobAndSpin
     void DoStarBobbing()
     {
-        transform.position += Vector3.up * 0.01f *  Mathf.Sin( 2 * Time.time);
+        MeshTransform.position += Vector3.up * 0.01f *  Mathf.Sin( 2 * Time.time);
     }
     void DoStarSpin()
     {
         //this needs looking at it completely murders the AI controller
         //I think it just needs to rotate the child mesh instead of the parent empty
-        transform.Rotate(Vector3.right, 10/happiness,Space.Self);
+        MeshTransform.Rotate(Vector3.right, 10/happiness,Space.Self);
     }
     #endregion
 
