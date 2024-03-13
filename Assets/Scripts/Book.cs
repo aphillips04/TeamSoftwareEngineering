@@ -8,7 +8,8 @@ public class Book : MonoBehaviour
     {
         
     }
-    public  Dictionary<BehaviourEnum, bool> SeenBehaviourFlags;
+    public  Dictionary<BehaviourEnum, bool> SeenBehaviourFlags;//idk how this will work
+    //this is based on the OLD idea for how the book works -- needs updating to the new system
     public List<GameObject> AllPages;
     public GameObject ActivePage;
     public void Start()
