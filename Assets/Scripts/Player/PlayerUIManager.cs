@@ -13,6 +13,7 @@ public class PlayerUIManager : MonoBehaviour
     [Header("Hotbar")]
     public GameObject HotbarPrefab;
     public Vector2 HotbarCenter;
+    public Transform HotbarTransform;
     public float BoxWidth;
     public List<Tool> ToolInventory;
     public List<GameObject> Hotbar;
@@ -80,7 +81,7 @@ public class PlayerUIManager : MonoBehaviour
         float HotbarStart = HotbarCenter.x - HotbarHalfWidth;
         for (int i = 0; i < HotbarCount; i++)
         {
-            Hotbar[i].transform.localPosition = new Vector2(HotbarStart + BoxWidth * i, HotbarCenter.y);
+            Hotbar[i].transform.localPosition = HotbarTransform.transform.localPosition + new Vector3(HotbarStart + BoxWidth * i, 0,0);
         }
 
     }

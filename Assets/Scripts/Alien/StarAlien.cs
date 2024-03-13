@@ -38,8 +38,9 @@ public class StarAlien : Alien
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
     private Transform MeshTransform;
-    
-    
+
+    public float DecayRate;
+
     #region unityMethods
     /// <summary>
     /// Start is the initial setup function, called before the first frame update
@@ -74,7 +75,7 @@ public class StarAlien : Alien
     /// </summary>
     public override void Update()
     {
-
+        UpdateEmotions();
         // Set the colour of the alien based on its happiness
         Color skinColour = new (
             .65f + (happiness *  .035f), // The change is calculated through: (end - start) / (steps - 1)
@@ -82,10 +83,10 @@ public class StarAlien : Alien
             .65f + (happiness * -.065f)  // The start value was RGB(166, 0, 166), end value was RGB(255, 255, 0) 
         );
         renderer.material.color = skinColour;
-
+        
         // Set the spin speed of the alien based on its calmness
 
-        
+        DecayEmotions();
     }
      void FixedUpdate()
     {
@@ -148,8 +149,20 @@ public class StarAlien : Alien
     /// How the alien responds to the players action
     /// </summary>
 
-
-
+    protected override void UpdateEmotions()
+    {
+        Emotions[(int)EmotionsEnum.Happiness] = 1234;
+        Emotions[(int)EmotionsEnum.Calmness] = 2345;
+    }
+    private void DecayEmotions()
+    {
+        for(int i=0;i<Emotions.Length;i++)
+        {
+            float diff = Emotions[i] - BaseEmotions[i];
+            float normalDiff = diff / diff;
+            Emotions[i] = DecayRate * Time.deltaTime * normalDiff;
+        }
+    }
     //down here we need actions
     //we will also need some way to vary the mood randomly based on the day
     //perhaps with some sort of carryover based on previous day behaviour

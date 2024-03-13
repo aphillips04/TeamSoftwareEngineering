@@ -5,13 +5,14 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 public abstract class Alien : MonoBehaviour
 {
-    protected enum EmotionsEnum { Happiness, Calmness, Fear, Anger } //just examples for now
+    protected enum EmotionsEnum {Happiness, Calmness} //just examples for now
     protected struct WeightedDelegate
     {
         public float Weight;
         public Action action;
     }
     protected float[] Emotions = new float[Enum.GetNames(typeof(EmotionsEnum)).Length]; // when emotions need to be accesed do Emotions[(int)_emotionName_]
+    protected float[] BaseEmotions = new float[Enum.GetNames(typeof(EmotionsEnum)).Length];
 
     protected bool needNewAction = true;
     protected delegate bool Action();
@@ -23,6 +24,7 @@ public abstract class Alien : MonoBehaviour
     public abstract void Start();
     public abstract void Update();
     public abstract void React(Tool tool);
+    protected abstract void UpdateEmotions();
     protected abstract void InitActions(); // this function will populate allActions and should be called in Start() -- needs to be defined on a per-subclass basis since they will all have different actions
     protected abstract void UpdateWeights(); // BASED ON EMOTIONS
     protected void InitGenericActions()

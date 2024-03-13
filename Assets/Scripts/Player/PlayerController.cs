@@ -88,8 +88,8 @@ public class PlayerController : MonoBehaviour
     {
         //Debug.Log(Grounded());
         JumpAndGravity();
-        Move();
-        Look();
+        DoMovement();
+        DoLook();
     }
     void FixedUpdate()
     {
@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour
         ActiveTool = ToolInventory[ToolIndex];
         
     }
-    private void Move()
+    private void DoMovement()
     {
         if (Cursor.lockState == CursorLockMode.Confined)
             return;
@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
         if (movementInput != Vector2.zero) moveDirection = transform.right * movementInput.x + transform.forward * movementInput.y; 
         controller.Move(moveDirection * (currentMoveSpeed * Time.deltaTime) + new Vector3(0f,currentVerticalVelocity) * Time.deltaTime);
     }
-    private void Look()
+    private void DoLook()
     {
         if (Cursor.lockState == CursorLockMode.Confined)
             return;

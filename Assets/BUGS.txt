@@ -4,3 +4,5 @@ currently the tool raycast sees the alien no matter where you look for some reas
 I *think* the rotation on the alien is gonna fuck with the navmeshagent - not sure yet
 
 On a separate note -- we need a better way to check what raycasts hit so we don't get null references when they hit nothing / something that doesn't interact in the right way
+
+scale the hotbar based on an empty on the canvas -- think i just need to lock the empty to the bottom of screen somehow
