@@ -114,6 +114,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public void UpdateRelationshipBar(float relationship)
     {
+        //Debug.Log(relationship);
         targetFill = (float)Math.Round(relationship / 10, 2, MidpointRounding.AwayFromZero);
     }
     public void SetRelationshipBar(float relationship)

@@ -27,6 +27,28 @@ public abstract class Alien : MonoBehaviour
     protected abstract void UpdateEmotions();
     protected abstract void InitActions(); // this function will populate allActions and should be called in Start() -- needs to be defined on a per-subclass basis since they will all have different actions
     protected abstract void UpdateWeights(); // BASED ON EMOTIONS
+    protected void UpdateEmotion(EmotionsEnum emotion, float value)
+    {
+        float currentValue = Emotions[(int)emotion];
+        float newValue = currentValue+value;
+        if (newValue < 0)
+            newValue = 0;
+        else if (newValue > 10)
+            newValue = 10;
+        Emotions[(int)emotion] = newValue;
+    }
+    protected void SetEmotion(EmotionsEnum emotion, float newValue)
+    {
+        if (newValue < 0)
+            newValue = 0;
+        else if (newValue > 10)
+            newValue = 10;
+        Emotions[(int)emotion] = newValue;
+    }
+    protected float GetEmotion(EmotionsEnum emotion)
+    {
+       return Emotions[(int)emotion];
+    }
     protected void InitGenericActions()
     {
         //optional functionality - if actions are put here into Alien.cs they can be added to allActions without needing to do it in the child class
