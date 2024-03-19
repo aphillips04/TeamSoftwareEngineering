@@ -197,9 +197,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c3e2b634fc0e14b926a29fbeac9948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FatigueModifier: 4
+  FatigueDecayRate: 0.1
   HomeSpot: {fileID: 1390076103}
   PlayerTransform: {fileID: 2063227531}
-  DecayRate: 0.05
+  EmotionDecayRate: 0
   baseDistance: 20
 --- !u!4 &56742246
 Transform:

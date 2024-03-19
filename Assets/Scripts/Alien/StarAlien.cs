@@ -33,7 +33,9 @@ public class StarAlien : Alien
     private PlayerUIManager UIManager;
     private Transform MeshTransform;
     public Transform PlayerTransform;
-    public float DecayRate = 0;
+    public float EmotionDecayRate = 0;
+   
+    
     public float baseDistance = 20;
     #region unityMethods
     /// <summary>
@@ -49,11 +51,17 @@ public class StarAlien : Alien
             if (render.CompareTag("StarEye"))
                 renderer = render;
         }
+        //THESE NEED MOVING AT SOME POINT
         Emotions[(int)(EmotionsEnum.Happiness)] = 5;
         Emotions[(int)(EmotionsEnum.Calmness)] = 5;
 
         BaseEmotions[(int)(EmotionsEnum.Happiness)] = 5;
         BaseEmotions[(int)(EmotionsEnum.Calmness)] = 5;
+        for (int i = 0; i < BaseEmotionFatigue.Length; i++)
+        {
+           BaseEmotionFatigue[i] = 1.0f;
+        }
+        EmotionFatigue = BaseEmotionFatigue;
         nav = GetComponent<NavMeshAgent>();
         nav.SetDestination(HomeSpot.position);
         
@@ -72,7 +80,6 @@ public class StarAlien : Alien
     /// </summary>
     public override void Update()
     {
-        UpdateEmotions();
         // Set the colour of the alien based on its happiness
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         Color skinColour = new (
@@ -84,7 +91,8 @@ public class StarAlien : Alien
         
         // Set the spin speed of the alien based on its calmness
 
-        DecayEmotions();
+        DecayEmotions(Emotions,BaseEmotions,EmotionDecayRate);
+        DecayEmotions(EmotionFatigue, BaseEmotionFatigue, FatigueDecayRate);
     }
      void FixedUpdate()
     {
@@ -162,20 +170,11 @@ public class StarAlien : Alien
         //Emotions[(int)EmotionsEnum.Happiness] = 1234;
        // Emotions[(int)EmotionsEnum.Calmness] = 2345;
     }
-    private void DecayEmotions()
+   
+
+    private void UpdateEmotionFatigue()
     {
-        for(int i=0;i<Emotions.Length;i++)
-        {
-            float diff = Emotions[i] - BaseEmotions[i];
-            if (Mathf.Abs(diff) < DecayRate / 2)
-                Emotions[i] = BaseEmotions[i];
-            else if (diff != 0 && DecayRate != 0)
-            {
-                float unit = Mathf.Abs(diff) / diff;
-                Emotions[i] -= DecayRate * Time.deltaTime * unit;
-            }
-        }
-        UIManager.UpdateRelationshipBar(relationship);
+
     }
     //down here we need actions
     //we will also need some way to vary the mood randomly based on the day
