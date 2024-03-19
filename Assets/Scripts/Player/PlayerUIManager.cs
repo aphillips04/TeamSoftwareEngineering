@@ -64,6 +64,7 @@ public class PlayerUIManager : MonoBehaviour
             g.SendMessage("SelectToolIcon", tool.toolType);
             Hotbar.Add(g);
         }
+        Hotbar[_activeIndex].SendMessage("Activate");
     }
     void DrawHotbar()
     {
