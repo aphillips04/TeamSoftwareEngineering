@@ -13,6 +13,7 @@ public class PlayerUIManager : MonoBehaviour
     [Header("Hotbar")]
     public GameObject HotbarPrefab;
     public Vector2 HotbarCenter;
+    public Transform HotbarTransform;
     public float BoxWidth;
     public List<Tool> ToolInventory;
     public List<GameObject> Hotbar;
@@ -63,6 +64,7 @@ public class PlayerUIManager : MonoBehaviour
             g.SendMessage("SelectToolIcon", tool.toolType);
             Hotbar.Add(g);
         }
+        Hotbar[_activeIndex].SendMessage("Activate");
     }
     void DrawHotbar()
     {
@@ -80,7 +82,7 @@ public class PlayerUIManager : MonoBehaviour
         float HotbarStart = HotbarCenter.x - HotbarHalfWidth;
         for (int i = 0; i < HotbarCount; i++)
         {
-            Hotbar[i].transform.localPosition = new Vector2(HotbarStart + BoxWidth * i, HotbarCenter.y);
+            Hotbar[i].transform.localPosition = HotbarTransform.transform.localPosition + new Vector3(HotbarStart + BoxWidth * i, 0,0);
         }
 
     }
@@ -113,6 +115,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public void UpdateRelationshipBar(float relationship)
     {
+        //Debug.Log(relationship);
         targetFill = (float)Math.Round(relationship / 10, 2, MidpointRounding.AwayFromZero);
     }
     public void SetRelationshipBar(float relationship)

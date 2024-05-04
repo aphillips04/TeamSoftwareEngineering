@@ -8,17 +8,11 @@ using Random = UnityEngine.Random;
 public class StarAlien : Alien
 {
     #region legacyMembers
-    public int happiness
-    {
-        get { return _happiness; }
-        set { if (value <= 0) _happiness = 1; else _happiness = value; }
-    }
-    private int _happiness;
-    public int calmness = 5; // Higher is happier, higher is calmer
+
     [HideInInspector]
     public float relationship
     {
-        get { return (happiness + calmness) / 2; }
+        get { return (Emotions[(int)EmotionsEnum.Happiness] + Emotions[(int)EmotionsEnum.Calmness]) / 2; }
         private set { }
     }
     #endregion
@@ -38,8 +32,11 @@ public class StarAlien : Alien
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
     private Transform MeshTransform;
+    public Transform PlayerTransform;
+    public float EmotionDecayRate = 0;
+   
     
-    
+    public float baseDistance = 20;
     #region unityMethods
     /// <summary>
     /// Start is the initial setup function, called before the first frame update
@@ -54,8 +51,17 @@ public class StarAlien : Alien
             if (render.CompareTag("StarEye"))
                 renderer = render;
         }
-        
-        happiness = 5;
+        //THESE NEED MOVING AT SOME POINT
+        Emotions[(int)(EmotionsEnum.Happiness)] = 5;
+        Emotions[(int)(EmotionsEnum.Calmness)] = 5;
+
+        BaseEmotions[(int)(EmotionsEnum.Happiness)] = 5;
+        BaseEmotions[(int)(EmotionsEnum.Calmness)] = 5;
+        for (int i = 0; i < BaseEmotionFatigue.Length; i++)
+        {
+           BaseEmotionFatigue[i] = 1.0f;
+        }
+        EmotionFatigue = BaseEmotionFatigue;
         nav = GetComponent<NavMeshAgent>();
         nav.SetDestination(HomeSpot.position);
         
@@ -74,25 +80,32 @@ public class StarAlien : Alien
     /// </summary>
     public override void Update()
     {
-
         // Set the colour of the alien based on its happiness
+        float happiness = Emotions[(int)EmotionsEnum.Happiness];
         Color skinColour = new (
             .65f + (happiness *  .035f), // The change is calculated through: (end - start) / (steps - 1)
             .00f + (happiness *  .100f), // There are 11 steps of from 0 to 11
             .65f + (happiness * -.065f)  // The start value was RGB(166, 0, 166), end value was RGB(255, 255, 0) 
         );
         renderer.material.color = skinColour;
-
+        
         // Set the spin speed of the alien based on its calmness
 
-        
+        DecayEmotions(Emotions,BaseEmotions,EmotionDecayRate);
+        DecayEmotions(EmotionFatigue, BaseEmotionFatigue, FatigueDecayRate);
     }
      void FixedUpdate()
     {
+        DoPlayerDistance();
         DoStarBobbing();
         DoStarSpin();
     }
     #endregion
+    void DoPlayerDistance()
+    {
+        nav.SetDestination(PlayerTransform.position);
+        nav.stoppingDistance = baseDistance - relationship;
+    }
     #region bobAndSpin
     void DoStarBobbing()
     {
@@ -102,7 +115,11 @@ public class StarAlien : Alien
     {
         //this needs looking at it completely murders the AI controller
         //I think it just needs to rotate the child mesh instead of the parent empty
-        MeshTransform.Rotate(Vector3.right, 10/happiness,Space.Self);
+        float happines = GetEmotion(EmotionsEnum.Happiness);
+        if (happines == 0) { Debug.Log("SADA"); }
+        float spinSpeed = 10 / happines; 
+        MeshTransform.Rotate(Vector3.right,spinSpeed ,Space.Self);
+        //Debug.Log(spinSpeed);
     }
     #endregion
 
@@ -114,19 +131,19 @@ public class StarAlien : Alien
         Debug.Log(string.Format("reacted to {0}", tool.toolType));
         if (tool.toolType == Tools.Touch_Gently)
         {
-            happiness = Math.Min(10, happiness + 1); 
+            UpdateEmotion(EmotionsEnum.Happiness, 1); 
         }
         else if (tool.toolType == Tools.Touch_Roughly)
         {
-            happiness = Math.Min(10, happiness - 1);
+            UpdateEmotion(EmotionsEnum.Happiness,- 1);
         }
         else if (tool.toolType == Tools.Feed_Treat)
         {
-            calmness = Math.Min(10, calmness + 1);
+            UpdateEmotion(EmotionsEnum.Calmness, 1);
         }
         else if (tool.toolType == Tools.Feed_LiveAnimal)
         {
-            calmness = Math.Min(10, calmness - 1);
+            UpdateEmotion(EmotionsEnum.Calmness,- 1);
         }
         else if (tool.toolType == Tools.Item_Oscilliscope)
         {
@@ -148,8 +165,17 @@ public class StarAlien : Alien
     /// How the alien responds to the players action
     /// </summary>
 
+    protected override void UpdateEmotions()
+    {
+        //Emotions[(int)EmotionsEnum.Happiness] = 1234;
+       // Emotions[(int)EmotionsEnum.Calmness] = 2345;
+    }
+   
 
+    private void UpdateEmotionFatigue()
+    {
 
+    }
     //down here we need actions
     //we will also need some way to vary the mood randomly based on the day
     //perhaps with some sort of carryover based on previous day behaviour
