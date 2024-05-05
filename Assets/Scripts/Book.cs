@@ -16,6 +16,7 @@ public class Book : MonoBehaviour
     {
         SetPageIndex(0);
     }
+    //this works on a list of GameObjects so "Page" can be of any type - so long as page exists in the hierarchy this is usable
     public void SetPageIndex(int index)
     {
         if (index <0 || index >= AllPages.Count)
