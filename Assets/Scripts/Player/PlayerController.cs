@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine.UI;
+using System.Threading;
 
 public class PlayerController : MonoBehaviour
 {
@@ -44,11 +47,13 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
 
     //components
+    public GameObject player;
     private DayCycle dayCycle;
     private CharacterController controller;
     private GameObject mainCamera;
     private Tool ActiveTool;
     private int _toolIndex;
+    public UnityEngine.UI.Image canvas;
     private int ToolIndex
     {
         get { return _toolIndex; }
@@ -256,5 +261,14 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(groundedSpherePos, 0.5f);
+    }
+    public void fadeToBlack()
+    {
+        float counter = 3;
+
+        counter -= Time.deltaTime;
+        Color color = new Color (0, 0, 0, counter/3);
+        canvas.GetComponent<UnityEngine.UI.Image>().color = color;
+
     }
 }

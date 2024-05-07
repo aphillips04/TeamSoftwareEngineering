@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class DoorScript : MonoBehaviour
 {
+    private PlayerController playerController;
     public float movementConstant;
     public float offset;
     [Header("")]
     public bool restDoor = false;
+  
     enum DoorState
     {
         idleBottom,
@@ -112,8 +114,15 @@ public class DoorScript : MonoBehaviour
         Debug.Log("Player interacted with door");
         if (restDoor)
         {
+            playerController.fadeToBlack();
+            float counter = 3;
+            counter -= Time.deltaTime;
+            //transform.rotation = new Quaternion(0, 180, 0, 0);
+            Vector3 rotation = new Vector3(0, 180, 0);
+            playerController.player.transform.eulerAngles = rotation;
             Debug.Log("REST DOOR USED");
             // TODO! rest door stuff
+
         }
         else if (state == DoorState.idleBottom)
         {
@@ -121,4 +130,5 @@ public class DoorScript : MonoBehaviour
             timer = 0.75f;
         }
     }
+   
 }
