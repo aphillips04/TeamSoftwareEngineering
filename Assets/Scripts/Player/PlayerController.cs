@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private float CineBottomClamp = -90.0f;
 
     private float cineTargetPitch;
-
+    
     private float currentMoveSpeed;
     private float currentRotationSpeed;
     private float currentVerticalVelocity;
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
     //components
     private CharacterController controller;
     private GameObject mainCamera;
-    private Tool ActiveTool;
+    public Tool ActiveTool;
     private int _toolIndex;
     private int ToolIndex
     {

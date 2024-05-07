@@ -200,8 +200,11 @@ MonoBehaviour:
   FatigueModifier: 4
   FatigueDecayRate: 0.1
   HomeSpot: {fileID: 1390076103}
+  CurrentTool: 0
   PlayerTransform: {fileID: 2063227531}
   EmotionDecayRate: 0
+  playerscript: {fileID: 0}
+  ToPlayer: 0
   baseDistance: 20
 --- !u!4 &56742246
 Transform:
@@ -3618,7 +3621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60864d42966b167418b09bf101349ec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 4
+  MoveSpeed: 10
   MoveAcceleration: 10
   RotationSpeed: 0.3
   JumpHeight: 1.2
@@ -3631,6 +3634,7 @@ MonoBehaviour:
   PlayerLayers:
     serializedVersion: 2
     m_Bits: 8
+  ActiveTool: {fileID: 0}
   ToolInventory: []
 --- !u!143 &2063227534
 CharacterController:
