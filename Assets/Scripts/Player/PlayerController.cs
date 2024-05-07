@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
 
     //components
+    private DayCycle dayCycle;
     private CharacterController controller;
     private GameObject mainCamera;
     private Tool ActiveTool;
@@ -75,13 +76,14 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        dayCycle = GetComponent<DayCycle>();
 
         UI = GetComponent<PlayerUIManager>();
         AddAllTools();
         this.ActiveTool = ToolInventory[0];
         UI.ToolInventory = ToolInventory;
         UI.InitHotbar(); // I wanted to do this in start() of UIManager but the inventory NEEDS to be initalised first 
-    }
+     }
 
     // Update is called once per frame
     void Update()
@@ -220,6 +222,12 @@ public class PlayerController : MonoBehaviour
     }
     public void UseTool()
     {
+        if (dayCycle.exhaustionMeter == 100)
+        {
+            NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!\n\n\ntest test test");
+            return;
+        }
+        dayCycle.OnAction();
         Ray r = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         ActiveTool.Use(r);
 
@@ -232,6 +240,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnApplicationFocus(bool hasFocus)
     {
+        if (UI == null) UI = GetComponent<PlayerUIManager>();
         Cursor.lockState = hasFocus ? UI.GetCursorMode() : CursorLockMode.None; 
     }
     private void AddAllTools()
