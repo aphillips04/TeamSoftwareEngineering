@@ -83,7 +83,9 @@ public class StarAlien : Alien
     /// Update is the objects game loop function, called once per frame
     /// </summary>
     public override void Update()
+        
     {
+        //Debug.Log(nav.isOnNavMesh);
         // Set the colour of the alien based on its happiness
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         Color skinColour = new (
