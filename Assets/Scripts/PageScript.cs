@@ -11,13 +11,16 @@ public class PageScript : MonoBehaviour
     public List<string> AllAlienDescriptions;
     public GameObject AlienName;
     public GameObject AlienDescription;
-    private TextMeshPro NameText;
-    private TextMeshPro DescText;
+    public GameObject ComboStart;
+    public float comboOffset;
+    public List<GameObject> Combos;
+    private TextMeshProUGUI NameText;
+    private TextMeshProUGUI DescText;
     // Start is called before the first frame update
     void Start()
     {
-        NameText = AlienName.GetComponent<TextMeshPro>();
-        DescText = AlienDescription.GetComponent<TextMeshPro>();
+        NameText = AlienName.GetComponent<TextMeshProUGUI>();
+        DescText = AlienDescription.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -25,20 +28,25 @@ public class PageScript : MonoBehaviour
     {
         
     }
-    public void SelectPages(string name)
+    public void BuildPages(string name)
     {
-        SelectLeftPage(name);
-        SelectRightPage(name);
+        
+        BuildLeftPage(name);
+        BuildRightPage(name);
     }
 
-    private void SelectRightPage(string name)
+    private void BuildRightPage(string name)
     {
-        //fill out combos
-        //yep
-        //storing combos could be tricky ill come back to this later
+        for (int i=0; i < Combos.Count;i++)
+        {
+            GameObject newObj = GameObject.Instantiate(Combos[i]);
+            newObj.transform.SetParent(ComboStart.transform);
+            newObj.transform.position = ComboStart.transform.position;
+            newObj.transform.localPosition += Vector3.up * i * comboOffset;
+        }
     }
 
-    private void SelectLeftPage(string name)//make sure to call this when instantiating pages
+    private void BuildLeftPage(string name)//make sure to call this when instantiating pages
     {
         if (!AllAlienNames.Contains(name))
         {
