@@ -12,7 +12,8 @@ public class PageScript : MonoBehaviour
     public GameObject AlienName;
     public GameObject AlienDescription;
     public GameObject ComboStart;
-    public float comboOffset;
+    public float comboYoffset;
+    public float comboXoffset;
     public List<GameObject> Combos;
     private TextMeshProUGUI NameText;
     private TextMeshProUGUI DescText;
@@ -39,10 +40,10 @@ public class PageScript : MonoBehaviour
     {
         for (int i=0; i < Combos.Count;i++)
         {
-            GameObject newObj = GameObject.Instantiate(Combos[i]);
-            newObj.transform.SetParent(ComboStart.transform);
+            GameObject newObj = GameObject.Instantiate(Combos[i],ComboStart.transform);
+            newObj.transform.localScale = Vector3.one;
             newObj.transform.position = ComboStart.transform.position;
-            newObj.transform.localPosition += Vector3.up * i * comboOffset;
+            newObj.transform.localPosition += new Vector3((i % 2) * comboXoffset ,i/2 * comboYoffset,0);
         }
     }
 

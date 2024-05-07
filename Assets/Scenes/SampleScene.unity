@@ -2271,7 +2271,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 322}
+  m_AnchoredPosition: {x: -150, y: 300}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1677457174
@@ -3390,6 +3390,14 @@ PrefabInstance:
       value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: comboXoffset
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: comboYoffset
+      value: -100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -3400,15 +3408,15 @@ PrefabInstance:
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.data[1]
       value: 
-      objectReference: {fileID: 6006524300247969830, guid: 5d1c53267b93167449db9e6121651f4a, type: 3}
+      objectReference: {fileID: 6006524300247969830, guid: 7e6c3c9e76bd2c14aba4a1d09ef42b7d, type: 3}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.data[2]
       value: 
-      objectReference: {fileID: 6006524300247969830, guid: ac9ba8f630adc864686b5b28817106a3, type: 3}
+      objectReference: {fileID: 6006524300247969830, guid: 1550d5ed3081d2a479364d7e88627be2, type: 3}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.data[3]
       value: 
-      objectReference: {fileID: 6006524300247969830, guid: 2abc36358e7f9bd4299c181b2713a697, type: 3}
+      objectReference: {fileID: 6006524300247969830, guid: b9431fe22254aab488ff45a5327178cb, type: 3}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: AllAlienNames.Array.data[0]
       value: Star
