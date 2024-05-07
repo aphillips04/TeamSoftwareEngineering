@@ -2271,7 +2271,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -150, y: 300}
+  m_AnchoredPosition: {x: -175, y: 300}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1677457174
@@ -3385,6 +3385,10 @@ PrefabInstance:
       propertyPath: ComboStart
       value: 
       objectReference: {fileID: 1674939648}
+    - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: comboScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: comboOffset
       value: -50

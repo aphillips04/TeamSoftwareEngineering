@@ -9,9 +9,11 @@ public class PageScript : MonoBehaviour
     public int numAliens;
     public List<string> AllAlienNames;
     public List<string> AllAlienDescriptions;
+    public List<GameObject> ComboInstances;
     public GameObject AlienName;
     public GameObject AlienDescription;
     public GameObject ComboStart;
+    public float comboScale=1;
     public float comboYoffset;
     public float comboXoffset;
     public List<GameObject> Combos;
@@ -41,7 +43,8 @@ public class PageScript : MonoBehaviour
         for (int i=0; i < Combos.Count;i++)
         {
             GameObject newObj = GameObject.Instantiate(Combos[i],ComboStart.transform);
-            newObj.transform.localScale = Vector3.one;
+            ComboInstances.Add(newObj);
+            newObj.transform.localScale = Vector3.one * comboScale;
             newObj.transform.position = ComboStart.transform.position;
             newObj.transform.localPosition += new Vector3((i % 2) * comboXoffset ,i/2 * comboYoffset,0);
         }

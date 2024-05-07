@@ -11,17 +11,17 @@ public class ComboScript : MonoBehaviour
     public bool correct = false;
     void Start()
     {
-        shownVer.SetActive(false);
-        hiddenVer.SetActive(true);
+        shownVer.SetActive(discovered);
+        hiddenVer.SetActive(!discovered);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (discovered)
+       // if (discovered)
         {
-            hiddenVer.SetActive(false);
-            shownVer.SetActive(true);
+            hiddenVer.SetActive(!discovered);
+            shownVer.SetActive(discovered);
             //show
             //
         }
