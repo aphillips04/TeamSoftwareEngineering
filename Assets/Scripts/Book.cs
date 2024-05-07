@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Composites;
 
 public class Book : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class Book : MonoBehaviour
     //this is based on the OLD idea for how the book works -- needs updating to the new system
     public List<GameObject> AllPages;
     public GameObject ActivePage;
+    public List<GameObject> AllButtons;
+    public GameObject leftAnchor;
+    public GameObject rightAnchor;
     public void Start()
     {
         SetPageIndex(0);
@@ -32,10 +36,25 @@ public class Book : MonoBehaviour
             return;
         
         ActivePage = AllPages[index];
-        foreach (var p in AllPages)
+        GameObject currentButton = AllButtons[index];
+        for (int i = 0; i < AllPages.Count; i++)
         {
+            GameObject p = AllPages[i];
+            GameObject button = AllButtons[i];
             p.SetActive(false);
+            button.transform.SetAsFirstSibling();
         }
+        for (int i = 0; i < index; i++)
+        {
+            GameObject button = AllButtons[i];
+            button.transform.position =new Vector3(leftAnchor.transform.position.x,button.transform.position.y,button.transform.position.z);
+        }
+        for (int i = index; i < AllButtons.Count; i++)
+        {
+            GameObject button = AllButtons[i];
+            button.transform.position = new Vector3(rightAnchor.transform.position.x, button.transform.position.y, button.transform.position.z);
+        }
+        currentButton.transform.SetAsLastSibling();
         ActivePage.SetActive(true);
     }
 }
