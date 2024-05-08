@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Composites;
-
+using UnityEngine.SceneManagement;
 public class Book : MonoBehaviour
 {
     public enum BehaviourEnum
@@ -16,8 +16,10 @@ public class Book : MonoBehaviour
     public List<GameObject> AllButtons;
     public GameObject leftAnchor;
     public GameObject rightAnchor;
+    public GameObject ExitPopup;
     public void Start()
     {
+        ExitPopup.SetActive(false);
         SetPageIndex(0);
         for (int i = 0; i < AllPages.Count; i++)
         {
@@ -62,4 +64,17 @@ public class Book : MonoBehaviour
         PageScript script = ActivePage.GetComponent<PageScript>();
         return script.ComboScriptInstances;
     }
+    public void ShowExitPopup()
+    {
+        ExitPopup.SetActive(true);
+    }
+    public void HideExitPopup()
+    {
+        ExitPopup.SetActive(false);
+    }
+    public void ExitGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+
 }
