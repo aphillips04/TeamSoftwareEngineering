@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Composites;
-
+using UnityEngine.SceneManagement;
 public class Book : MonoBehaviour
 {
     public enum BehaviourEnum
@@ -16,17 +16,18 @@ public class Book : MonoBehaviour
     public List<GameObject> AllButtons;
     public GameObject leftAnchor;
     public GameObject rightAnchor;
+    public GameObject ExitPopup;
     public void Start()
     {
+        ExitPopup.SetActive(false);
         SetPageIndex(0);
         for (int i = 0; i < AllPages.Count; i++)
         {
             GameObject page = AllPages[i];
             PageScript script = page.GetComponent<PageScript>();
-            if (script == null) {
-                Debug.Log("PAGESCRIPT NULL PANIC!");
+            if (script != null) {
+                script.BuildPages();
             }
-            script.BuildPages(script.AllAlienNames[i]);
         }
     }
     //this works on a list of GameObjects so "Page" can be of any type - so long as page exists in the hierarchy this is usable
@@ -62,4 +63,9 @@ public class Book : MonoBehaviour
         PageScript script = ActivePage.GetComponent<PageScript>();
         return script.ComboScriptInstances;
     }
+    public void ExitGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+
 }

@@ -27,7 +27,6 @@ public class StarAlien : Alien
 
     //navmesh could be moved to parent too
     private NavMeshAgent nav;
-    public Transform HomeSpot;
 
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
@@ -63,7 +62,6 @@ public class StarAlien : Alien
         }
         EmotionFatigue = BaseEmotionFatigue;
         nav = GetComponent<NavMeshAgent>();
-        nav.SetDestination(HomeSpot.position);
         
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         book = BookUI.GetComponent<Book>();

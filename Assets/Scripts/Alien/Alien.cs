@@ -5,6 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 public abstract class Alien : MonoBehaviour
 {
+    public PageScript myPage;
     protected enum EmotionsEnum {Happiness, Calmness} //just examples for now
     public GameObject BookUI;
     protected Book book;
