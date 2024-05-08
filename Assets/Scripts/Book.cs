@@ -64,14 +64,6 @@ public class Book : MonoBehaviour
         PageScript script = ActivePage.GetComponent<PageScript>();
         return script.ComboScriptInstances;
     }
-    public void ShowExitPopup()
-    {
-        ExitPopup.SetActive(true);
-    }
-    public void HideExitPopup()
-    {
-        ExitPopup.SetActive(false);
-    }
     public void ExitGame()
     {
         SceneManager.LoadScene(0);
