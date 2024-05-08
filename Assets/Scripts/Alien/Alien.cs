@@ -5,8 +5,12 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 public abstract class Alien : MonoBehaviour
 {
+    public PageScript myPage;
     protected enum EmotionsEnum {Happiness, Calmness} //just examples for now
-
+    public GameObject BookUI;
+    protected Book book;
+    protected List<ComboScript> CurrentCombos;
+    protected PageScript activePage;
     public float FatigueModifier = 4.0f; // Fatigue modifier -- this is a divisor -- higher values will make the alien respond LESS to each repeated action -- response decays to normal over time
     public float FatigueDecayRate = .1f; // Affects how quickly fatigue decays back to normal
     protected struct WeightedDelegate
@@ -30,6 +34,7 @@ public abstract class Alien : MonoBehaviour
     public abstract void Update();
     public abstract void React(Tool tool);
     protected abstract void UpdateEmotions();
+    public abstract void TryUnlockCombos();
     protected abstract void InitActions(); // this function will populate allActions and should be called in Start() -- needs to be defined on a per-subclass basis since they will all have different actions
     protected abstract void UpdateWeights(); // BASED ON EMOTIONS
     protected void UpdateEmotion(EmotionsEnum emotion, float value) //always use UpdateEmotion for runtime updates as it will affect the fatigue

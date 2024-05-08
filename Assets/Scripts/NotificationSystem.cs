@@ -14,7 +14,6 @@ public class NotificationSystem : MonoBehaviour
     void Start()
     {
         NotifSys.system = this;
-
         background = gameObject.transform.GetChild(0).gameObject;
         textBox = gameObject.transform.GetChild(1).gameObject;
         gameObject.SetActive(false);

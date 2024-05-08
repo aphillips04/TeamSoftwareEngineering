@@ -27,7 +27,6 @@ public class StarAlien : Alien
 
     //navmesh could be moved to parent too
     private NavMeshAgent nav;
-   
     public  Tools CurrentTool;
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
@@ -43,7 +42,6 @@ public class StarAlien : Alien
     /// Start is the initial setup function, called before the first frame update
     /// </summary>
     /// 
-
     private GameObject player;
     public override void Start()
     {
@@ -66,11 +64,10 @@ public class StarAlien : Alien
         }
         EmotionFatigue = BaseEmotionFatigue;
         nav = GetComponent<NavMeshAgent>();
-       
-        
+
         player = GameObject.FindGameObjectWithTag("Player");
         playerscript = player.GetComponent<PlayerController>();
-
+        book = BookUI.GetComponent<Book>();
         // Wait until player ui manager is ready
         UIManager = player.GetComponentInChildren<PlayerUIManager>();
         //relationship bar needs to be sorted (i think removed idk)
@@ -83,7 +80,6 @@ public class StarAlien : Alien
     /// Update is the objects game loop function, called once per frame
     /// </summary>
     public override void Update()
-        
     {
         //Debug.Log(nav.isOnNavMesh);
         // Set the colour of the alien based on its happiness
@@ -99,7 +95,6 @@ public class StarAlien : Alien
 
         DecayEmotions(Emotions,BaseEmotions,EmotionDecayRate);
         DecayEmotions(EmotionFatigue, BaseEmotionFatigue, FatigueDecayRate);
-
 		transform.LookAt(player.transform.position);
     }
      void FixedUpdate()
@@ -111,7 +106,6 @@ public class StarAlien : Alien
     #endregion
     void DoPlayerDistance()
     {
-       
         nav.SetDestination(PlayerTransform.position);
         nav.stoppingDistance = baseDistance - relationship + playersTool();
         moveback();
@@ -161,6 +155,46 @@ public class StarAlien : Alien
         // Update the UI
         UIManager.UpdateRelationshipBar(relationship);
     }
+    public override void TryUnlockCombos()
+    {
+        activePage = book.ActivePage.GetComponent<PageScript>();
+        CurrentCombos = book.GetCurrentCombos();
+        float happiness = Emotions[(int)EmotionsEnum.Happiness];
+        float calmness = Emotions[(int)EmotionsEnum.Calmness];
+        if (happiness > (1.0f / 3.0f))
+        {
+            //if happiness high
+            activePage.ActivateCombo("HappyHigh");
+                        
+        }
+        else if ((happiness < (1.0f/3.0f)) || (happiness > (-1.0f / 3.0f))){
+            //happiness middle
+            activePage.ActivateCombo("HappyMid");
+        }
+        else if (happiness < (-1.0f / 3.0f))
+        {
+            //happiness low
+            activePage.ActivateCombo("HappyLow");
+        }
+
+        if (calmness > (1.0f / 3.0f))
+        {
+            //if calmness high
+            activePage.ActivateCombo("CalmHigh");
+
+        }
+        else if ((calmness < (1.0f / 3.0f)) || (calmness > (-1.0f / 3.0f)))
+        {
+            //calmness middle
+            activePage.ActivateCombo("CalmMid");
+        }
+        else if (calmness < (-1.0f / 3.0f))
+        {
+            //calmness low
+
+            activePage.ActivateCombo("CalmLow");
+        }
+    }
     protected override void InitActions()
     {
         throw new NotImplementedException();
@@ -180,7 +214,6 @@ public class StarAlien : Alien
         //Emotions[(int)EmotionsEnum.Happiness] = 1234;
        // Emotions[(int)EmotionsEnum.Calmness] = 2345;
     }
-
 
     private void UpdateEmotionFatigue()
     {
@@ -239,6 +272,5 @@ public class StarAlien : Alien
             }
         }
     }
-
     #endregion
 }
