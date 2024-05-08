@@ -37,8 +37,10 @@ public class PlayerUIManager : MonoBehaviour
     void Start()
     {
         //Debug.Log("Hello World!");
-        MainUI.enabled = true;
-        BookUI.enabled = false;
+        MainUI.enabled = false;
+        BookUI.enabled = true;
+        ToggleUI();
+        ToggleUI();
     }
 
     // Update is called once per frame

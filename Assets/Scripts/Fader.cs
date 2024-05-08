@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Fader : MonoBehaviour
 {
     public GameObject player;
+    public Book BookUI;
     public Image Image;
     private float fadeDuration = 3;
     enum fadeType { None, FadeIn, FadeOut }
@@ -41,9 +42,20 @@ public class Fader : MonoBehaviour
                 controller.transform.position = new Vector3(0.13f, 3.5f, -29.0f);
                 controller.enabled = true;
                 player.GetComponent<DayCycle>().exhaustionMeter = 0;
+                PageScript ps;
+                if (BookUI.ActivePage.TryGetComponent<PageScript>(out ps))
+                {
+                    int correct = ps.CheckNumCorrect();
+                    NotifSys.system.notify("Number of correct answers on current page: " + correct, 5);
+                }
+                else
+                {
+                    NotifSys.system.notify("You must rest with an alien's page selected to check your answers!");
+                }
                 break;
             case fadeType.FadeOut:
                 fadeMode = fadeType.None;
+                
                 break;
             default:
                 Debug.LogError("INVALID FADEMODE: Fader.fade()");

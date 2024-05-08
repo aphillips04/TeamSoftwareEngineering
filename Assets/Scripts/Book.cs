@@ -24,10 +24,6 @@ public class Book : MonoBehaviour
         for (int i = 0; i < AllPages.Count; i++)
         {
             GameObject page = AllPages[i];
-            PageScript script = page.GetComponent<PageScript>();
-            if (script != null) {
-                script.BuildPages();
-            }
         }
     }
     //this works on a list of GameObjects so "Page" can be of any type - so long as page exists in the hierarchy this is usable

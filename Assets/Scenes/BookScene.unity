@@ -202,12 +202,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c3e2b634fc0e14b926a29fbeac9948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myPage: {fileID: 0}
   BookUI: {fileID: 1991934641}
   FatigueModifier: 4
   FatigueDecayRate: 0.1
-  HomeSpot: {fileID: 1390076103}
+  CurrentTool: 0
   PlayerTransform: {fileID: 2063227531}
   EmotionDecayRate: 0
+  playerscript: {fileID: 0}
+  ToPlayer: 0
   baseDistance: 20
 --- !u!4 &56742246
 Transform:
@@ -438,6 +441,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementConstant: 1
   offset: 3
+  restDoor: 0
+  dayCycle: {fileID: 0}
+  fader: {fileID: 0}
 --- !u!65 &231820271
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2443,7 +2449,7 @@ Transform:
   m_GameObject: {fileID: 1228502377}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.88, z: 0}
+  m_LocalPosition: {x: 0, y: 3.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4118,6 +4124,7 @@ GameObject:
   - component: {fileID: 2063227533}
   - component: {fileID: 2063227534}
   - component: {fileID: 2063227535}
+  - component: {fileID: 2063227536}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -4270,6 +4277,9 @@ MonoBehaviour:
   PlayerLayers:
     serializedVersion: 2
     m_Bits: 8
+  player: {fileID: 0}
+  ActiveTool: {fileID: 0}
+  canvas: {fileID: 0}
   ToolInventory: []
 --- !u!143 &2063227534
 CharacterController:
@@ -4318,6 +4328,19 @@ MonoBehaviour:
   ToolInventory: []
   Hotbar: []
   ProgressBarPrefab: {fileID: 2651463470120337713, guid: 0cb669d4cb1e3a44dbec0d3b9c035928, type: 3}
+--- !u!114 &2063227536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063227526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a973fda4949db1341934d284001b50fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exhaustionMeter: 0
 --- !u!1 &2097894773
 GameObject:
   m_ObjectHideFlags: 0

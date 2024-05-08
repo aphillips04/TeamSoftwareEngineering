@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class NotificationSystem : MonoBehaviour
 {
-    public GameObject test;
     private GameObject background;
     private GameObject textBox;
     private float timer;
