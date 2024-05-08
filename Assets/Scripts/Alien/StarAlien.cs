@@ -66,7 +66,7 @@ public class StarAlien : Alien
         nav.SetDestination(HomeSpot.position);
         
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-
+        book = BookUI.GetComponent<Book>();
         // Wait until player ui manager is ready
         UIManager = player.GetComponentInChildren<PlayerUIManager>();
         //relationship bar needs to be sorted (i think removed idk)
@@ -150,6 +150,46 @@ public class StarAlien : Alien
         }
         // Update the UI
         UIManager.UpdateRelationshipBar(relationship);
+    }
+    public override void TryUnlockCombos()
+    {
+        activePage = book.ActivePage.GetComponent<PageScript>();
+        CurrentCombos = book.GetCurrentCombos();
+        float happiness = Emotions[(int)EmotionsEnum.Happiness];
+        float calmness = Emotions[(int)EmotionsEnum.Calmness];
+        if (happiness > (1.0f / 3.0f))
+        {
+            //if happiness high
+            activePage.ActivateCombo("HappyHigh");
+                        
+        }
+        else if ((happiness < (1.0f/3.0f)) || (happiness > (-1.0f / 3.0f))){
+            //happiness middle
+            activePage.ActivateCombo("HappyMid");
+        }
+        else if (happiness < (-1.0f / 3.0f))
+        {
+            //happiness low
+            activePage.ActivateCombo("HappyLow");
+        }
+
+        if (calmness > (1.0f / 3.0f))
+        {
+            //if calmness high
+            activePage.ActivateCombo("CalmHigh");
+
+        }
+        else if ((calmness < (1.0f / 3.0f)) || (calmness > (-1.0f / 3.0f)))
+        {
+            //calmness middle
+            activePage.ActivateCombo("CalmMid");
+        }
+        else if (calmness < (-1.0f / 3.0f))
+        {
+            //calmness low
+
+            activePage.ActivateCombo("CalmLow");
+        }
     }
     protected override void InitActions()
     {
