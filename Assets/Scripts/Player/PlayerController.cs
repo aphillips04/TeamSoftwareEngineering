@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using UnityEngine.UI;
+using System.Threading;
 
 public class PlayerController : MonoBehaviour
 {
@@ -32,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private float CineBottomClamp = -90.0f;
 
     private float cineTargetPitch;
-
+    
     private float currentMoveSpeed;
     private float currentRotationSpeed;
     private float currentVerticalVelocity;
@@ -44,10 +46,13 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
 
     //components
+    public GameObject player;
+    private DayCycle dayCycle;
     private CharacterController controller;
     private GameObject mainCamera;
-    private Tool ActiveTool;
+    public Tool ActiveTool;
     private int _toolIndex;
+    public UnityEngine.UI.Image canvas;
     private int ToolIndex
     {
         get { return _toolIndex; }
@@ -75,13 +80,14 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        dayCycle = GetComponent<DayCycle>();
 
         UI = GetComponent<PlayerUIManager>();
         AddAllTools();
         this.ActiveTool = ToolInventory[0];
         UI.ToolInventory = ToolInventory;
         UI.InitHotbar(); // I wanted to do this in start() of UIManager but the inventory NEEDS to be initalised first 
-    }
+     }
 
     // Update is called once per frame
     void Update()
@@ -220,6 +226,8 @@ public class PlayerController : MonoBehaviour
     }
     public void UseTool()
     {
+        if (dayCycle.exhaustionMeter == 100) { NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!"); return; }
+        dayCycle.OnAction();
         Ray r = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         ActiveTool.Use(r);
 
@@ -232,10 +240,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnApplicationFocus(bool hasFocus)
     {
-        if (UI == null)
-        {
-            UI = GetComponent<PlayerUIManager>();
-        }
+        if (UI == null) UI = GetComponent<PlayerUIManager>();
         Cursor.lockState = hasFocus ? UI.GetCursorMode() : CursorLockMode.None; 
     }
     private void AddAllTools()
@@ -252,4 +257,13 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(groundedSpherePos, 0.5f);
     }
+    //public void fadeToBlack()
+    //{
+    //    float counter = 3;
+
+    //    counter -= Time.deltaTime;
+    //    Color color = new Color (0, 0, 0, counter/3);
+    //    canvas.GetComponent<UnityEngine.UI.Image>().color = color;
+
+    //}
 }

@@ -27,13 +27,14 @@ public class StarAlien : Alien
 
     //navmesh could be moved to parent too
     private NavMeshAgent nav;
-
+    public  Tools CurrentTool;
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
     private Transform MeshTransform;
     public Transform PlayerTransform;
     public float EmotionDecayRate = 0;
-   
+    public PlayerController playerscript;
+    public int ToPlayer = 0;
     
     public float baseDistance = 20;
     #region unityMethods
@@ -41,6 +42,7 @@ public class StarAlien : Alien
     /// Start is the initial setup function, called before the first frame update
     /// </summary>
     /// 
+    private GameObject player;
     public override void Start()
     {
         MeshTransform = transform.Find("StarMesh");
@@ -62,8 +64,9 @@ public class StarAlien : Alien
         }
         EmotionFatigue = BaseEmotionFatigue;
         nav = GetComponent<NavMeshAgent>();
-        
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerscript = player.GetComponent<PlayerController>();
         book = BookUI.GetComponent<Book>();
         // Wait until player ui manager is ready
         UIManager = player.GetComponentInChildren<PlayerUIManager>();
@@ -78,6 +81,7 @@ public class StarAlien : Alien
     /// </summary>
     public override void Update()
     {
+        //Debug.Log(nav.isOnNavMesh);
         // Set the colour of the alien based on its happiness
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         Color skinColour = new (
@@ -91,6 +95,7 @@ public class StarAlien : Alien
 
         DecayEmotions(Emotions,BaseEmotions,EmotionDecayRate);
         DecayEmotions(EmotionFatigue, BaseEmotionFatigue, FatigueDecayRate);
+		transform.LookAt(player.transform.position);
     }
      void FixedUpdate()
     {
@@ -102,7 +107,8 @@ public class StarAlien : Alien
     void DoPlayerDistance()
     {
         nav.SetDestination(PlayerTransform.position);
-        nav.stoppingDistance = baseDistance - relationship;
+        nav.stoppingDistance = baseDistance - relationship + playersTool();
+        moveback();
     }
     #region bobAndSpin
     void DoStarBobbing()
@@ -208,7 +214,6 @@ public class StarAlien : Alien
         //Emotions[(int)EmotionsEnum.Happiness] = 1234;
        // Emotions[(int)EmotionsEnum.Calmness] = 2345;
     }
-   
 
     private void UpdateEmotionFatigue()
     {
@@ -238,6 +243,34 @@ public class StarAlien : Alien
         //idle does nothing
         actionTimer += Time.deltaTime;
         return false;
+    }
+
+    private int playersTool()
+    {
+        CurrentTool = playerscript.ActiveTool.toolType;
+
+        if (CurrentTool == Tools.Touch_Gently || CurrentTool == Tools.Feed_Treat)
+        {
+           return - 5;
+        }
+        else if (CurrentTool == Tools.Touch_Roughly || CurrentTool == Tools.Feed_LiveAnimal)
+        {
+            return 5;
+        }
+        else { return 0; }
+    }
+
+    void moveback()
+    {
+        {
+            Vector3 ToPlayer = player.transform.position - transform.position;
+            if (Vector3.Magnitude(ToPlayer) < nav.stoppingDistance -1)
+            {
+                Vector3 targetPosition = ToPlayer.normalized * nav.stoppingDistance * -2;
+                nav.destination = targetPosition;
+               
+            }
+        }
     }
     #endregion
 }
