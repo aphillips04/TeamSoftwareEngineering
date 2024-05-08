@@ -25,10 +25,9 @@ public class Book : MonoBehaviour
         {
             GameObject page = AllPages[i];
             PageScript script = page.GetComponent<PageScript>();
-            if (script == null) {
-                Debug.Log("PAGESCRIPT NULL PANIC!");
+            if (script != null) {
+                script.BuildPages();
             }
-            script.BuildPages(script.AllAlienNames[i]);
         }
     }
     //this works on a list of GameObjects so "Page" can be of any type - so long as page exists in the hierarchy this is usable

@@ -6,9 +6,8 @@ using System;
 
 public class PageScript : MonoBehaviour
 {
-    public int numAliens;
-    public List<string> AllAlienNames;
-    public List<string> AllAlienDescriptions;
+    public string AlienNamestr;
+    public string AlienDescstr;
     public List<ComboScript> ComboScriptInstances;
     public GameObject AlienName;
     public GameObject AlienDescription;
@@ -31,14 +30,14 @@ public class PageScript : MonoBehaviour
     {
         
     }
-    public void BuildPages(string name)
+    public void BuildPages()
     {
         
-        BuildLeftPage(name);
-        BuildRightPage(name);
+        BuildLeftPage();
+        BuildRightPage();
     }
 
-    private void BuildRightPage(string name)
+    private void BuildRightPage()
     {
         for (int i=0; i < Combos.Count;i++)
         {
@@ -50,18 +49,10 @@ public class PageScript : MonoBehaviour
         }
     }
 
-    private void BuildLeftPage(string name)//make sure to call this when instantiating pages
+    private void BuildLeftPage()//make sure to call this when instantiating pages
     {
-        if (!AllAlienNames.Contains(name))
-        {
-            Debug.Log("SelectLeftPage was given an invalid alien name!");
-            NameText.text = "ERROR";
-            DescText.text = "Invalid alien name given!";
-            return;
-        }
-        int idx = AllAlienNames.IndexOf(name);
-        NameText.text = AllAlienNames[idx];
-        DescText.text = AllAlienDescriptions[idx];
+        NameText.text = AlienNamestr;
+        DescText.text = AlienDescstr;
     }
     public void ActivateCombo(string name)
     {
