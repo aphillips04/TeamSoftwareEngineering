@@ -57,4 +57,9 @@ public class Book : MonoBehaviour
         currentButton.transform.SetAsLastSibling();
         ActivePage.SetActive(true);
     }
+    public List<ComboScript> GetCurrentCombos()
+    {
+        PageScript script = ActivePage.GetComponent<PageScript>();
+        return script.ComboScriptInstances;
+    }
 }

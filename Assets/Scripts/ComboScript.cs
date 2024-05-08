@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ComboScript : MonoBehaviour
 {
     public List<string> placeholderTexts;
+    public string comboName;
     public GameObject hiddenVer;
     public GameObject shownVer;
+    public Dropdown dropdown;
+    public int correctIndex;
     public bool discovered = false;
     public bool correct = false;
     void Start()
@@ -24,6 +28,17 @@ public class ComboScript : MonoBehaviour
             shownVer.SetActive(discovered);
             //show
             //
+        }
+    }
+    private void CheckCorrect()
+    {
+        if (dropdown.value == correctIndex) 
+        {
+            correct = true;
+        }
+        else
+        {
+            correct = false;
         }
     }
 }

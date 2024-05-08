@@ -9,7 +9,7 @@ public class PageScript : MonoBehaviour
     public int numAliens;
     public List<string> AllAlienNames;
     public List<string> AllAlienDescriptions;
-    public List<GameObject> ComboInstances;
+    public List<ComboScript> ComboScriptInstances;
     public GameObject AlienName;
     public GameObject AlienDescription;
     public GameObject ComboStart;
@@ -43,7 +43,7 @@ public class PageScript : MonoBehaviour
         for (int i=0; i < Combos.Count;i++)
         {
             GameObject newObj = GameObject.Instantiate(Combos[i],ComboStart.transform);
-            ComboInstances.Add(newObj);
+            ComboScriptInstances.Add(newObj.GetComponent<ComboScript>());
             newObj.transform.localScale = Vector3.one * comboScale;
             newObj.transform.position = ComboStart.transform.position;
             newObj.transform.localPosition += new Vector3((i % 2) * comboXoffset ,i/2 * comboYoffset,0);
@@ -62,5 +62,27 @@ public class PageScript : MonoBehaviour
         int idx = AllAlienNames.IndexOf(name);
         NameText.text = AllAlienNames[idx];
         DescText.text = AllAlienDescriptions[idx];
+    }
+    public void ActivateCombo(string name)
+    {
+        foreach (ComboScript cs in ComboScriptInstances)
+        {
+            if (cs.name == name)
+            {
+                cs.discovered = true;
+            }
+        }
+    }
+    public int CheckNumCorrect()
+    {
+        int output = 0;
+        foreach (ComboScript cs in ComboScriptInstances)
+        {
+            if (cs.correct)
+            {
+                output++;
+            }
+        }
+        return output;
     }
 }
