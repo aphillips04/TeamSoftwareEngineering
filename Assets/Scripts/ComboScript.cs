@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ComboScript : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class ComboScript : MonoBehaviour
     public string comboName;
     public GameObject hiddenVer;
     public GameObject shownVer;
-    public Dropdown dropdown;
+    public TMP_Dropdown dropdown;
     public int correctIndex;
     public bool discovered = false;
     public bool correct = false;
