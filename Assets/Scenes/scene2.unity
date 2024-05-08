@@ -158,7 +158,7 @@ MonoBehaviour:
   movementConstant: 1
   offset: 5
   restDoor: 1
-  player: {fileID: 648720986}
+  dayCycle: {fileID: 648720995}
   fader: {fileID: 924005258}
   UIObject: {fileID: 525216367}
 --- !u!65 &9041414
@@ -2109,7 +2109,7 @@ MonoBehaviour:
   movementConstant: 0
   offset: 0
   restDoor: 0
-  player: {fileID: 648720986}
+  dayCycle: {fileID: 648720995}
   fader: {fileID: 924005258}
   UIObject: {fileID: 525216367}
 --- !u!1 &600414368
@@ -2676,7 +2676,7 @@ MonoBehaviour:
   movementConstant: 0
   offset: 0
   restDoor: 0
-  player: {fileID: 648720986}
+  dayCycle: {fileID: 648720995}
   fader: {fileID: 924005258}
   UIObject: {fileID: 525216367}
 --- !u!1 &734178814
@@ -3171,7 +3171,7 @@ MonoBehaviour:
   movementConstant: 1
   offset: 5
   restDoor: 0
-  player: {fileID: 648720986}
+  dayCycle: {fileID: 648720995}
   fader: {fileID: 924005258}
   UIObject: {fileID: 525216367}
 --- !u!1 &816644844
@@ -3768,7 +3768,7 @@ MonoBehaviour:
   movementConstant: 1
   offset: 5
   restDoor: 0
-  player: {fileID: 648720986}
+  dayCycle: {fileID: 648720995}
   fader: {fileID: 924005258}
   UIObject: {fileID: 525216367}
 --- !u!1 &923424997

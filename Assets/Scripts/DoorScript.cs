@@ -7,10 +7,8 @@ public class DoorScript : MonoBehaviour
     public float movementConstant;
     public float offset;
     public bool restDoor = false;
-    public GameObject player;
-    private DayCycle dayCycle;
+    public DayCycle dayCycle;
     public Fader fader;
-    public GameObject UIObject;
   
     enum DoorState
     {
@@ -29,7 +27,6 @@ public class DoorScript : MonoBehaviour
         state = DoorState.idleBottom;
         originalPos = transform.position;
         upPos = new Vector3(transform.position.x, transform.position.y + offset, transform.position.z);
-        if (restDoor) dayCycle = player.GetComponent<DayCycle>();
     }
     private void Update()
     {
