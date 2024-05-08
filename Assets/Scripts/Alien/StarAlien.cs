@@ -99,7 +99,7 @@ public class StarAlien : Alien
 
 		transform.LookAt(player.transform.position);
     }
-     void FixedUpdate()
+    void FixedUpdate()
     {
         DoPlayerDistance();
         DoStarBobbing();
@@ -108,12 +108,24 @@ public class StarAlien : Alien
     #endregion
     void DoPlayerDistance()
     {
-       
+        if (Math.Abs(InterestLevel) < 0.2) return DoIdleMovement();
         nav.SetDestination(PlayerTransform.position);
         nav.stoppingDistance = baseDistance - relationship + playersTool();
         moveback();
     }
-    #region bobAndSpin
+    void moveback()
+    {
+        {
+            Vector3 ToPlayer = player.transform.position - transform.position;
+            if (Vector3.Magnitude(ToPlayer) < nav.stoppingDistance - 1)
+            {
+                Vector3 targetPosition = ToPlayer.normalized * nav.stoppingDistance * -2;
+                nav.destination = targetPosition;
+
+            }
+        }
+    }
+    #region BobAndSpin
     void DoStarBobbing()
     {
         MeshTransform.position += Vector3.up * 0.01f *  Mathf.Sin( 2 * Time.time);
@@ -157,14 +169,6 @@ public class StarAlien : Alien
         }
         // Update the UI
         UIManager.UpdateRelationshipBar(relationship);
-    }
-    protected override void InitActions()
-    {
-        throw new NotImplementedException();
-    }
-    protected override void UpdateWeights()
-    {
-        throw new NotImplementedException();
     }
     #endregion
 
@@ -215,26 +219,13 @@ public class StarAlien : Alien
 
         if (CurrentTool == Tools.Touch_Gently || CurrentTool == Tools.Feed_Treat)
         {
-           return - 5;
+            return -5;
         }
         else if (CurrentTool == Tools.Touch_Roughly || CurrentTool == Tools.Feed_LiveAnimal)
         {
             return 5;
         }
         else { return 0; }
-    }
-
-    void moveback()
-    {
-        {
-            Vector3 ToPlayer = player.transform.position - transform.position;
-            if (Vector3.Magnitude(ToPlayer) < nav.stoppingDistance -1)
-            {
-                Vector3 targetPosition = ToPlayer.normalized * nav.stoppingDistance * -2;
-                nav.destination = targetPosition;
-               
-            }
-        }
     }
 
     #endregion

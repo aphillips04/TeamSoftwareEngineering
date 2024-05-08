@@ -3135,7 +3135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 10
-  MoveAcceleration: 10
+  MoveAcceleration: 50
   RotationSpeed: 0.3
   JumpHeight: 1.2
   Gravity: -9.81
@@ -5285,12 +5285,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FatigueModifier: 4
   FatigueDecayRate: 0.1
-  HomeSpot: {fileID: 0}
   CurrentTool: 0
   PlayerTransform: {fileID: 648720987}
   EmotionDecayRate: 0
   playerscript: {fileID: 648720990}
   ToPlayer: 0
+  InterestLevel: 0.5
+  InterestDecayRate: 0.005
   baseDistance: 20
 --- !u!4 &1014949779
 Transform:
