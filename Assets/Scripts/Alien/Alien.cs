@@ -2,13 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 public abstract class Alien : MonoBehaviour
 {
+    protected NavMeshAgent nav;
+
     protected enum EmotionsEnum {Happiness, Calmness} //just examples for now
 
     public float FatigueModifier = 4.0f; // Fatigue modifier -- this is a divisor -- higher values will make the alien respond LESS to each repeated action -- response decays to normal over time
     public float FatigueDecayRate = .1f; // Affects how quickly fatigue decays back to normal
+
     protected struct WeightedDelegate
     {
         public float Weight;

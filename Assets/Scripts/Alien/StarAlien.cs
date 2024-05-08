@@ -16,7 +16,6 @@ public class StarAlien : Alien
         private set { }
     }
     #endregion
-
     
     //private Dictionary<EmotionsEnum, double> Emotions = new Dictionary<EmotionsEnum, double>();
     //this is a dictionary here but using an enum I suppose you could also assign each one an int value (in the enum) and then it can be a straight array
@@ -24,11 +23,7 @@ public class StarAlien : Alien
     //but *technically* we don't *need* a dictionary since we only need to store one float per member of the enum and that is all known at compile time
     //I think i'm just trying to over-optimise (getting a bit c++ brained with arrays vs "real" generic containers)
 
-
-    //navmesh could be moved to parent too
-    private NavMeshAgent nav;
-   
-    public  Tools CurrentTool;
+    public Tools CurrentTool;
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
     private Transform MeshTransform;
@@ -36,7 +31,9 @@ public class StarAlien : Alien
     public float EmotionDecayRate = 0;
     public PlayerController playerscript;
     public int ToPlayer = 0;
-    
+    public float InterestLevel = 0.5f; // This is a level from -1 to 1, larger absolute values indicate more interest (be that negative or positive interest)
+    public float InterestDecayRate = 0.005f; // This determines the rate at which the interest will decay back to neutral
+
     public float baseDistance = 20;
     #region unityMethods
     /// <summary>

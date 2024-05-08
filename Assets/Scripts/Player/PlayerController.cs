@@ -232,6 +232,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnApplicationFocus(bool hasFocus)
     {
+        if (UI == null) UI = GetComponent<PlayerUIManager>();
         Cursor.lockState = hasFocus ? UI.GetCursorMode() : CursorLockMode.None; 
     }
     private void AddAllTools()
