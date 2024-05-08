@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class DoorScript : MonoBehaviour
 {
-    private PlayerController playerController;
     public float movementConstant;
     public float offset;
-    [Header("")]
     public bool restDoor = false;
+    public GameObject player;
+    private DayCycle dayCycle;
+    public Fader fader;
+    public GameObject UIObject;
   
     enum DoorState
     {
@@ -27,9 +29,11 @@ public class DoorScript : MonoBehaviour
         state = DoorState.idleBottom;
         originalPos = transform.position;
         upPos = new Vector3(transform.position.x, transform.position.y + offset, transform.position.z);
+        if (restDoor) dayCycle = player.GetComponent<DayCycle>();
     }
     private void Update()
     {
+
         switch (state)
         {
             case DoorState.idleBottom:
@@ -111,17 +115,11 @@ public class DoorScript : MonoBehaviour
     }
     public void OnPlayerInteract()
     {
-        Debug.Log("Player interacted with door");
+        //Debug.Log("Player interacted with door");
         if (restDoor)
         {
-            playerController.fadeToBlack();
-            float counter = 3;
-            counter -= Time.deltaTime;
-            //transform.rotation = new Quaternion(0, 180, 0, 0);
-            Vector3 rotation = new Vector3(0, 180, 0);
-            playerController.player.transform.eulerAngles = rotation;
-            Debug.Log("REST DOOR USED");
-            // TODO! rest door stuff
+            if (dayCycle.exhaustionMeter == 100) fader.fadeToBlack(3);
+            else NotifSys.system.notify("You are not tired enough to rest!\nGo interect with the aliens.");
 
         }
         else if (state == DoorState.idleBottom)

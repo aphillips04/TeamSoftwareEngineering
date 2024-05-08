@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine.UI;
 using System.Threading;
 
@@ -35,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private float CineBottomClamp = -90.0f;
 
     private float cineTargetPitch;
-    
+
     private float currentMoveSpeed;
     private float currentRotationSpeed;
     private float currentVerticalVelocity;
@@ -227,11 +226,7 @@ public class PlayerController : MonoBehaviour
     }
     public void UseTool()
     {
-        if (dayCycle.exhaustionMeter == 100)
-        {
-            NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!\n\n\ntest test test");
-            return;
-        }
+        if (dayCycle.exhaustionMeter == 100) { NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!"); return; }
         dayCycle.OnAction();
         Ray r = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         ActiveTool.Use(r);
@@ -262,13 +257,13 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(groundedSpherePos, 0.5f);
     }
-    public void fadeToBlack()
-    {
-        float counter = 3;
+    //public void fadeToBlack()
+    //{
+    //    float counter = 3;
 
-        counter -= Time.deltaTime;
-        Color color = new Color (0, 0, 0, counter/3);
-        canvas.GetComponent<UnityEngine.UI.Image>().color = color;
+    //    counter -= Time.deltaTime;
+    //    Color color = new Color (0, 0, 0, counter/3);
+    //    canvas.GetComponent<UnityEngine.UI.Image>().color = color;
 
-    }
+    //}
 }

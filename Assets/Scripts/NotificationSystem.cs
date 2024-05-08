@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class NotificationSystem : MonoBehaviour
 {
-    [SerializeField] private GameObject notifications;
+    public GameObject test;
     private GameObject background;
     private GameObject textBox;
     private float timer;
@@ -15,18 +15,18 @@ public class NotificationSystem : MonoBehaviour
     {
         NotifSys.system = this;
 
-        background = notifications.transform.GetChild(0).gameObject;
-        textBox = notifications.transform.GetChild(1).gameObject;
-        notifications.SetActive(false);
+        background = gameObject.transform.GetChild(0).gameObject;
+        textBox = gameObject.transform.GetChild(1).gameObject;
+        gameObject.SetActive(false);
         textBox.GetComponent<TextMeshProUGUI>().color = Color.white;
     }
     private void Update()
     {
-        if (!notifications.activeSelf) return;
+        if (!gameObject.activeSelf) return;
         timer += Time.deltaTime;
         if (timer > length)
         {
-            notifications.SetActive(false);
+            gameObject.SetActive(false);
         }
         
     }
@@ -37,7 +37,7 @@ public class NotificationSystem : MonoBehaviour
         timer = 0;
 
         // Update text and show
-        notifications.SetActive(true);
+        gameObject.SetActive(true);
         textBox.GetComponent<TextMeshProUGUI>().text = message;
 
         // Force update canvas to run content size fitter, calculating new height
@@ -45,7 +45,6 @@ public class NotificationSystem : MonoBehaviour
 
         // Update background to same dimensions as textbox
         Vector2 size = textBox.GetComponent<RectTransform>().sizeDelta;
-        Debug.Log(size);
         background.GetComponent<RectTransform>().sizeDelta = size;
     }
 }

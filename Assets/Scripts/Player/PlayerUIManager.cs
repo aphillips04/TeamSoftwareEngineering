@@ -61,6 +61,7 @@ public class PlayerUIManager : MonoBehaviour
         foreach (Tool tool in ToolInventory)
         {
             GameObject g = Instantiate(HotbarPrefab, MainUI.transform);
+            g.transform.SetAsFirstSibling();
             g.SendMessage("SelectToolIcon", tool.toolType);
             Hotbar.Add(g);
         }
