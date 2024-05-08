@@ -63,11 +63,10 @@ public class StarAlien : Alien
         }
         EmotionFatigue = BaseEmotionFatigue;
         nav = GetComponent<NavMeshAgent>();
-       
-        
+
         player = GameObject.FindGameObjectWithTag("Player");
         playerscript = player.GetComponent<PlayerController>();
-
+        book = BookUI.GetComponent<Book>();
         // Wait until player ui manager is ready
         UIManager = player.GetComponentInChildren<PlayerUIManager>();
         //relationship bar needs to be sorted (i think removed idk)
@@ -80,9 +79,7 @@ public class StarAlien : Alien
     /// Update is the objects game loop function, called once per frame
     /// </summary>
     public override void Update()
-        
     {
-        //Debug.Log(nav.isOnNavMesh);
         // Set the colour of the alien based on its happiness
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         Color skinColour = new (
@@ -170,6 +167,54 @@ public class StarAlien : Alien
         // Update the UI
         UIManager.UpdateRelationshipBar(relationship);
     }
+    public override void TryUnlockCombos()
+    {
+        activePage = book.ActivePage.GetComponent<PageScript>();
+        CurrentCombos = book.GetCurrentCombos();
+        float happiness = Emotions[(int)EmotionsEnum.Happiness];
+        float calmness = Emotions[(int)EmotionsEnum.Calmness];
+        if (happiness > (1.0f / 3.0f))
+        {
+            //if happiness high
+            activePage.ActivateCombo("HappyHigh");
+                        
+        }
+        else if ((happiness < (1.0f/3.0f)) || (happiness > (-1.0f / 3.0f))){
+            //happiness middle
+            activePage.ActivateCombo("HappyMid");
+        }
+        else if (happiness < (-1.0f / 3.0f))
+        {
+            //happiness low
+            activePage.ActivateCombo("HappyLow");
+        }
+
+        if (calmness > (1.0f / 3.0f))
+        {
+            //if calmness high
+            activePage.ActivateCombo("CalmHigh");
+
+        }
+        else if ((calmness < (1.0f / 3.0f)) || (calmness > (-1.0f / 3.0f)))
+        {
+            //calmness middle
+            activePage.ActivateCombo("CalmMid");
+        }
+        else if (calmness < (-1.0f / 3.0f))
+        {
+            //calmness low
+
+            activePage.ActivateCombo("CalmLow");
+        }
+    }
+    protected override void InitActions()
+    {
+        throw new NotImplementedException();
+    }
+    protected override void UpdateWeights()
+    {
+        throw new NotImplementedException();
+    }
     #endregion
 
     /// <summary>
@@ -181,7 +226,6 @@ public class StarAlien : Alien
         //Emotions[(int)EmotionsEnum.Happiness] = 1234;
        // Emotions[(int)EmotionsEnum.Calmness] = 2345;
     }
-
 
     private void UpdateEmotionFatigue()
     {
