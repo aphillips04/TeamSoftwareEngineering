@@ -14,6 +14,7 @@ public class DayCycle : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
     }
+    // Reset exhauation, player position, player rotation and notify of amount of correct combos
     public void EndDay()
     {
         exhaustionMeter = 0;
