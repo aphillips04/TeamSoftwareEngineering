@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 public abstract class Alien : MonoBehaviour
 {
+    protected NavMeshAgent nav;
     public PageScript myPage;
     protected enum EmotionsEnum {Happiness, Calmness} //just examples for now
     public GameObject BookUI;
@@ -29,10 +31,39 @@ public abstract class Alien : MonoBehaviour
     protected float actionTimer;
     protected List<WeightedDelegate> allActions;
 
+    public PlayerController playerscript;
+    public Vector3 RoomP1;
+    public Vector3 RoomP2;
+    protected bool lostInterest = false;
+
     //tbh start and update dont need to be here but oh well
     public abstract void Start();
     public abstract void Update();
     public abstract void React(Tool tool);
+    protected void DoIdleMovement(Vector3 navDest)
+    {
+        // only change desitnation if the alien is close to the current one
+        Vector3 playerPos = playerscript.gameObject.transform.position;playerPos.y = 0.08f;
+        if (
+            Vector3.Distance(transform.position, navDest) > 3.0f &&
+            Vector3.Distance(playerPos, navDest) > 0.1f &&
+            !(Vector3.Distance(playerPos, transform.position) < 7.0f)
+        ) return;
+        Vector3 idlePos = playerPos;
+        while (Math.Abs(playerPos.x - idlePos.x) < 5.0f) idlePos.x = Random.Range(RoomP1.x, RoomP2.x);
+        while (Math.Abs(playerPos.z - idlePos.z) < 5.0f) idlePos.z = Random.Range(RoomP2.z, RoomP1.z);
+        nav.SetDestination(idlePos);
+        nav.stoppingDistance = 0;
+    }
+    protected int playersTool()
+    {
+        Tools CurrentTool = playerscript.ActiveTool.toolType;
+
+        if (CurrentTool == Tools.Touch_Gently || CurrentTool == Tools.Feed_Treat) return -5;
+        else if (CurrentTool == Tools.Touch_Roughly || CurrentTool == Tools.Feed_LiveAnimal) return 5;
+        else return 0;
+    }
+    protected abstract void UpdateInterest(Tools type);
     protected abstract void UpdateEmotions();
     public abstract void TryUnlockCombos();
     protected abstract void InitActions(); // this function will populate allActions and should be called in Start() -- needs to be defined on a per-subclass basis since they will all have different actions
@@ -48,9 +79,7 @@ public abstract class Alien : MonoBehaviour
             newValue = 10;
         Emotions[(int)emotion] = newValue;
         EmotionFatigue[(int)emotion] /= FatigueModifier;
-
     }
-
     protected void SetEmotion(EmotionsEnum emotion, float newValue)
     {
         if (newValue < 0)
@@ -77,33 +106,4 @@ public abstract class Alien : MonoBehaviour
             }
         }
     }
-    protected void InitGenericActions()
-    {
-        //optional functionality - if actions are put here into Alien.cs they can be added to allActions without needing to do it in the child class
-    }
-    protected void ChooseAction()
-    {
-        UpdateWeights();//updates the weights based on the emotions
-
-        //choose an action entirely based on its weight
-        //https://stackoverflow.com/questions/56692/random-weighted-choice
-        float totalWeight = 0;
-        foreach(var action in allActions)
-        {
-            totalWeight += action.Weight;
-        }
-        float randomNum = Random.Range(0, totalWeight);
-        foreach(var action in allActions)
-        {
-            if (randomNum < action.Weight)
-            {
-                action.action(); //important to remember the ACTION is in charge of registering itself and telling update to call it next frame
-                return;
-            }
-            randomNum -= action.Weight;
-        }
-
-    }
-
-    //not entirely convinced having generic actions is a good idea but it's possible for simple ones like idle, movetowardplayer
 }

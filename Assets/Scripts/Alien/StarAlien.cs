@@ -16,7 +16,6 @@ public class StarAlien : Alien
         private set { }
     }
     #endregion
-
     
     //private Dictionary<EmotionsEnum, double> Emotions = new Dictionary<EmotionsEnum, double>();
     //this is a dictionary here but using an enum I suppose you could also assign each one an int value (in the enum) and then it can be a straight array
@@ -24,18 +23,15 @@ public class StarAlien : Alien
     //but *technically* we don't *need* a dictionary since we only need to store one float per member of the enum and that is all known at compile time
     //I think i'm just trying to over-optimise (getting a bit c++ brained with arrays vs "real" generic containers)
 
-
-    //navmesh could be moved to parent too
-    private NavMeshAgent nav;
-    public  Tools CurrentTool;
     private new MeshRenderer renderer;
     private PlayerUIManager UIManager;
     private Transform MeshTransform;
     public Transform PlayerTransform;
     public float EmotionDecayRate = 0;
-    public PlayerController playerscript;
     public int ToPlayer = 0;
-    
+    public float InterestLevel = 0.5f; // This is a level from -1 to 1, larger absolute values indicate more interest (be that negative or positive interest)
+    public float InterestDecayRate = 1f/16384f; // This determines the rate at which the interest will decay back to neutral
+
     public float baseDistance = 20;
     #region unityMethods
     /// <summary>
@@ -81,7 +77,6 @@ public class StarAlien : Alien
     /// </summary>
     public override void Update()
     {
-        //Debug.Log(nav.isOnNavMesh);
         // Set the colour of the alien based on its happiness
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         Color skinColour = new (
@@ -95,22 +90,37 @@ public class StarAlien : Alien
 
         DecayEmotions(Emotions,BaseEmotions,EmotionDecayRate);
         DecayEmotions(EmotionFatigue, BaseEmotionFatigue, FatigueDecayRate);
-		transform.LookAt(player.transform.position);
+
+        if (Math.Abs(InterestLevel) > 0.3 && InStarRoom()) transform.LookAt(player.transform.position);
     }
-     void FixedUpdate()
+    void FixedUpdate()
     {
-        DoPlayerDistance();
+        InterestLevel += InterestLevel == 0 ? 0 : (InterestLevel < 0 ? InterestDecayRate : -InterestDecayRate);
+        if (Math.Abs(InterestLevel) < 0.3 && !lostInterest) { lostInterest = true; nav.SetDestination(PlayerTransform.position); }
+        else if (Math.Abs(InterestLevel) > 0.3 && lostInterest) lostInterest = false;
+
         DoStarBobbing();
         DoStarSpin();
+        if (Math.Abs(InterestLevel) < 0.3 || !InStarRoom()) DoIdleMovement(nav.destination); // RoomP1 = (47.5, 0, 46.5) RoomP2 = (-18.5, 0, 22.5)
+        else DoPlayerDistance();
+        MoveToDestination();
     }
     #endregion
     void DoPlayerDistance()
     {
         nav.SetDestination(PlayerTransform.position);
         nav.stoppingDistance = baseDistance - relationship + playersTool();
-        moveback();
     }
-    #region bobAndSpin
+    void MoveToDestination()
+    {
+        Vector3 ToPlayer = player.transform.position - transform.position;
+        if (Vector3.Magnitude(ToPlayer) < nav.stoppingDistance - 1)
+        {
+            Vector3 targetPosition = ToPlayer.normalized * nav.stoppingDistance * -2;
+            nav.destination = targetPosition;
+        }
+    }
+    #region BobSpinRoom
     void DoStarBobbing()
     {
         MeshTransform.position += Vector3.up * 0.01f *  Mathf.Sin( 2 * Time.time);
@@ -119,11 +129,20 @@ public class StarAlien : Alien
     {
         //this needs looking at it completely murders the AI controller
         //I think it just needs to rotate the child mesh instead of the parent empty
-        float happines = GetEmotion(EmotionsEnum.Happiness);
-        if (happines == 0) { Debug.Log("SADA"); }
-        float spinSpeed = 10 / happines; 
-        MeshTransform.Rotate(Vector3.right,spinSpeed ,Space.Self);
+        float happiness = GetEmotion(EmotionsEnum.Happiness);
+        if (happiness == 0) { Debug.Log("SADA"); }
+        float spinSpeed = 10 / happiness; 
+        MeshTransform.Rotate(Vector3.right,spinSpeed,Space.Self);
         //Debug.Log(spinSpeed);
+    }
+    bool InStarRoom()
+    {
+        // FOR EVERY ALIEN INCREASE X VALUE BY 33.7
+        return (
+            -48.9 < player.transform.position.x && player.transform.position.x < -16.9 // Ensure player is in the correct x range
+        ) && (
+            48.2 > player.transform.position.z && player.transform.position.z > 20.8 // Ensure player is in the correct z range
+        );
     }
     #endregion
 
@@ -135,7 +154,7 @@ public class StarAlien : Alien
         Debug.Log(string.Format("reacted to {0}", tool.toolType));
         if (tool.toolType == Tools.Touch_Gently)
         {
-            UpdateEmotion(EmotionsEnum.Happiness, 1); 
+            UpdateEmotion(EmotionsEnum.Happiness, 1);
         }
         else if (tool.toolType == Tools.Touch_Roughly)
         {
@@ -152,8 +171,24 @@ public class StarAlien : Alien
         else if (tool.toolType == Tools.Item_Oscilliscope)
         {
         }
+        UpdateInterest(tool.toolType);
         // Update the UI
         UIManager.UpdateRelationshipBar(relationship);
+    }
+    protected override void UpdateInterest(Tools type)
+    {
+        if (type == Tools.Touch_Gently || type == Tools.Feed_Treat)
+        {
+            if (InterestLevel < 0f && InterestLevel >= -0.425f) InterestLevel = 0.425f;
+            else InterestLevel += 0.125f;
+        }
+        else if (type == Tools.Touch_Roughly || type == Tools.Feed_LiveAnimal)
+        {
+            if (InterestLevel > 0f && InterestLevel <= 0.425f) InterestLevel = -0.425f;
+            else InterestLevel -= 0.125f;
+        }
+        if (InterestLevel > 1) InterestLevel = 1;
+        else if (InterestLevel < -1) InterestLevel = -1;
     }
     public override void TryUnlockCombos()
     {
@@ -243,34 +278,6 @@ public class StarAlien : Alien
         //idle does nothing
         actionTimer += Time.deltaTime;
         return false;
-    }
-
-    private int playersTool()
-    {
-        CurrentTool = playerscript.ActiveTool.toolType;
-
-        if (CurrentTool == Tools.Touch_Gently || CurrentTool == Tools.Feed_Treat)
-        {
-           return - 5;
-        }
-        else if (CurrentTool == Tools.Touch_Roughly || CurrentTool == Tools.Feed_LiveAnimal)
-        {
-            return 5;
-        }
-        else { return 0; }
-    }
-
-    void moveback()
-    {
-        {
-            Vector3 ToPlayer = player.transform.position - transform.position;
-            if (Vector3.Magnitude(ToPlayer) < nav.stoppingDistance -1)
-            {
-                Vector3 targetPosition = ToPlayer.normalized * nav.stoppingDistance * -2;
-                nav.destination = targetPosition;
-               
-            }
-        }
     }
     #endregion
 }
