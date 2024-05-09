@@ -7,57 +7,38 @@ using System.Xml.Linq;
 
 public class PageScript : MonoBehaviour
 {
-    public string AlienNamestr;
-    public string AlienDescstr;
-    public List<ComboScript> ComboScriptInstances;
-    public GameObject AlienName;
-    public GameObject AlienDescription;
+    [Header("Components")]
     public GameObject ComboStart;
+
+    [Header("State variables")]
+    public List<ComboScript> ComboScriptInstances;
+
+    [Header("Constants")]
+    public List<GameObject> Combos;
     public float comboScale=1;
     public float comboYoffset;
     public float comboXoffset;
-    public List<GameObject> Combos;
-    private TextMeshProUGUI NameText;
-    private TextMeshProUGUI DescText;
-    // Start is called before the first frame update
+    // Start is called the first time the object is activated
     void Start()
     {
-        //Debug.Log("TESCO");
-        //AlienNamestr = "Subject 241 \n The Witness";
-        NameText = AlienName.GetComponent<TextMeshProUGUI>();
-        DescText = AlienDescription.GetComponent<TextMeshProUGUI>();
-        BuildPages();
+        BuildPage();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void BuildPages()
-    {
-        
-        BuildLeftPage();
-        BuildRightPage();
-    }
-
-    private void BuildRightPage()
+    // Places all the combos on the page
+    private void BuildPage()
     {
         for (int i=0; i < Combos.Count;i++)
         {
+            // Instantiate the combo on the page and hold on to a reference to it
             GameObject newObj = GameObject.Instantiate(Combos[i],ComboStart.transform);
             ComboScriptInstances.Add(newObj.GetComponent<ComboScript>());
+            // Reset the scale
             newObj.transform.localScale = Vector3.one * comboScale;
+            // Set its position based on its index
             newObj.transform.position = ComboStart.transform.position;
             newObj.transform.localPosition += new Vector3((i % 2) * comboXoffset ,i/2 * comboYoffset,0);
         }
     }
-
-    private void BuildLeftPage()//make sure to call this when instantiating pages
-    {
-        //NameText.text = AlienNamestr;
-        //DescText.text = AlienDescstr;
-    }
+    // Sets a combo as visible by "name"
     public void ActivateCombo(string name)
     {
         foreach (ComboScript cs in ComboScriptInstances)
@@ -68,15 +49,13 @@ public class PageScript : MonoBehaviour
             }
         }
     }
+    // Count the number of correctly selected dropdown options on the current page
     public int CheckNumCorrect()
     {
         int output = 0;
         foreach (ComboScript cs in ComboScriptInstances)
         {
-            if (cs.CheckCorrect())
-            {
-                output++;
-            }
+            if (cs.CheckCorrect()) output++;
         }
         return output;
     }
