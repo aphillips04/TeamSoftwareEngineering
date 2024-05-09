@@ -177,6 +177,7 @@ public class Star : Alien
         else if (tool.toolType == Tools.Item_Oscilliscope) { } // This is an unused tool type
         // Update the interest value as a tool has been used 
         UpdateInterest(tool.toolType);
+        TryUnlockCombos();
     }
     // Updates the interest by a set amount after an action.
     // If the update would cause the alien to become 
@@ -206,7 +207,6 @@ public class Star : Alien
         if (happiness > (20.0f / 3.0f))
         {
             myPage.ActivateCombo("HappyHigh");
-
         }
         else if ((happiness < (20.0f / 3.0f)) || (happiness > (10.0f / 3.0f)))
         {
@@ -219,7 +219,6 @@ public class Star : Alien
         if (calmness > (20.0f / 3.0f))
         {
             myPage.ActivateCombo("CalmHigh");
-
         }
         else if ((calmness < (20.0f / 3.0f)) || (calmness > (10.0f / 3.0f)))
         {
