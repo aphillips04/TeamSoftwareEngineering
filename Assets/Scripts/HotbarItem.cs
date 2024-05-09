@@ -6,28 +6,17 @@ using UnityEngine.UI;
 
 public class HotbarItem : MonoBehaviour
 {
+    [Header("Visual Components")]
     public List<Sprite> AllIcons;
-
     public Image box;
     public Image icon;
 
-
-
-    public bool isHighlighted;
-    public void Start()
+    private bool isHighlighted = false;
+    void Update()
     {
-        
-    }
-    public void Update()
-    {
-        if (isHighlighted)
-        {
-            box.color = Color.white;
-        }
-        else
-        {
-            box.color = Color.black;
-        }
+        // Change color to show player which tool they are using
+        if (isHighlighted) box.color = Color.white;
+        else box.color = Color.black;
     }
     
     public void SelectToolIcon(Tools toolType)
