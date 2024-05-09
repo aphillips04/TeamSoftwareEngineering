@@ -192,42 +192,40 @@ public class StarAlien : Alien
     }
     public override void TryUnlockCombos()
     {
-        activePage = book.ActivePage.GetComponent<PageScript>();
-        CurrentCombos = book.GetCurrentCombos();
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         float calmness = Emotions[(int)EmotionsEnum.Calmness];
-        if (happiness > (1.0f / 3.0f))
+        if (happiness > (20.0f / 3.0f))
         {
             //if happiness high
-            activePage.ActivateCombo("HappyHigh");
+            myPage.ActivateCombo("HappyHigh");
                         
         }
-        else if ((happiness < (1.0f/3.0f)) || (happiness > (-1.0f / 3.0f))){
+        else if ((happiness < (20.0f/3.0f)) || (happiness > (10.0f / 3.0f))){
             //happiness middle
-            activePage.ActivateCombo("HappyMid");
+            myPage.ActivateCombo("HappyMid");
         }
-        else if (happiness < (-1.0f / 3.0f))
+        else if (happiness < (10.0f / 3.0f))
         {
             //happiness low
-            activePage.ActivateCombo("HappyLow");
+            myPage.ActivateCombo("HappyLow");
         }
 
-        if (calmness > (1.0f / 3.0f))
+        if (calmness > (20.0f / 3.0f))
         {
             //if calmness high
-            activePage.ActivateCombo("CalmHigh");
+            myPage.ActivateCombo("CalmHigh");
 
         }
-        else if ((calmness < (1.0f / 3.0f)) || (calmness > (-1.0f / 3.0f)))
+        else if ((calmness < (20.0f / 3.0f)) || (calmness > (10.0f / 3.0f)))
         {
             //calmness middle
-            activePage.ActivateCombo("CalmMid");
+            myPage.ActivateCombo("CalmMid");
         }
-        else if (calmness < (-1.0f / 3.0f))
+        else if (calmness < (10.0f / 3.0f))
         {
             //calmness low
 
-            activePage.ActivateCombo("CalmLow");
+            myPage.ActivateCombo("CalmLow");
         }
     }
     protected override void InitActions()
