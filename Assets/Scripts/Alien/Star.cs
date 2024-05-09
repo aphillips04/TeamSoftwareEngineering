@@ -5,7 +5,7 @@ using System.Data;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
-public class StarAlien : Alien
+public class Star : Alien
 {
     #region legacyMembers
 

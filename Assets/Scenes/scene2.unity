@@ -5629,7 +5629,7 @@ GameObject:
   - component: {fileID: 1014949777}
   - component: {fileID: 1014949776}
   m_Layer: 0
-  m_Name: StarAlien
+  m_Name: Star
   m_TagString: Alien
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
