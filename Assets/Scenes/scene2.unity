@@ -155,11 +155,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d96447f24e70314aba49d363e22eaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dayCycle: {fileID: 648720995}
+  fader: {fileID: 314520448}
   movementConstant: 1
   offset: 5
   restDoor: 1
-  dayCycle: {fileID: 648720995}
-  fader: {fileID: 314520448}
 --- !u!65 &9041414
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -560,8 +560,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c69e9087614ac4285513f0ffafd537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPage: {fileID: 256769614}
   BookUI: {fileID: 1782708004}
+  RoomP1obj: {fileID: 1000831543}
+  RoomP2obj: {fileID: 444629193}
+  playerscript: {fileID: 648720990}
+  myPage: {fileID: 256769614}
   FatigueModifier: 2
   FatigueDecayRate: 0.1
   EmotionFatigue:
@@ -570,15 +573,11 @@ MonoBehaviour:
   BaseEmotionFatigue:
   - 0
   - 0
-  playerscript: {fileID: 648720990}
-  RoomP1obj: {fileID: 1000831543}
-  RoomP2obj: {fileID: 444629193}
   PlayerTransform: {fileID: 648720987}
+  baseDistance: 10
   EmotionDecayRate: 0
-  ToPlayer: 0
   InterestLevel: 0.5
   InterestDecayRate: 0.000061035156
-  baseDistance: 10
 --- !u!195 &69500701
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3482,11 +3481,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d96447f24e70314aba49d363e22eaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dayCycle: {fileID: 0}
+  fader: {fileID: 0}
   movementConstant: 1
   offset: 5
   restDoor: 0
-  dayCycle: {fileID: 0}
-  fader: {fileID: 0}
 --- !u!1 &600414368
 GameObject:
   m_ObjectHideFlags: 0
@@ -4511,11 +4510,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d96447f24e70314aba49d363e22eaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dayCycle: {fileID: 0}
+  fader: {fileID: 0}
   movementConstant: 1
   offset: 5
   restDoor: 0
-  dayCycle: {fileID: 0}
-  fader: {fileID: 0}
 --- !u!1 &816644844
 GameObject:
   m_ObjectHideFlags: 0
@@ -5067,11 +5066,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d96447f24e70314aba49d363e22eaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dayCycle: {fileID: 0}
+  fader: {fileID: 0}
   movementConstant: 1
   offset: 5
   restDoor: 0
-  dayCycle: {fileID: 0}
-  fader: {fileID: 0}
 --- !u!1 &901490951
 GameObject:
   m_ObjectHideFlags: 0
@@ -5690,8 +5689,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c3e2b634fc0e14b926a29fbeac9948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPage: {fileID: 1746980997}
   BookUI: {fileID: 1782708004}
+  RoomP1obj: {fileID: 1684786708}
+  RoomP2obj: {fileID: 63915787}
+  playerscript: {fileID: 648720990}
+  myPage: {fileID: 1746980997}
   FatigueModifier: 2
   FatigueDecayRate: 0.1
   EmotionFatigue:
@@ -5700,15 +5702,11 @@ MonoBehaviour:
   BaseEmotionFatigue:
   - 0
   - 0
-  playerscript: {fileID: 648720990}
-  RoomP1obj: {fileID: 1684786708}
-  RoomP2obj: {fileID: 63915787}
   PlayerTransform: {fileID: 648720987}
+  baseDistance: 15
   EmotionDecayRate: 0
-  ToPlayer: 0
   InterestLevel: 0.5
   InterestDecayRate: 0.000061035156
-  baseDistance: 15
 --- !u!4 &1014949779
 Transform:
   m_ObjectHideFlags: 0
@@ -6201,6 +6199,16 @@ PrefabInstance:
       value: 'Subject 753
 
         The Creeper'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2242701093499131455, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: m_text
+      value: '
+
+        This alien behaves very much like a predator, it menancingly
+        moves towards me as I enter the room, we observed that it will either run
+        around the room, or sit down depending on the intensity of our physical interaction
+        with it. Additionally the colour of it''s eyes change depending on what we
+        feed it, definitely a carnivore...'
       objectReference: {fileID: 0}
     - target: {fileID: 4268740005714076318, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: m_Pivot.x
@@ -10074,20 +10082,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 749b82e2db238914fb2813320cdcbcf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ExitPopup: {fileID: 2036867584}
+  AllButtons:
+  - {fileID: 2137349721}
+  - {fileID: 1457925523}
+  - {fileID: 1989150817}
+  - {fileID: 1317601373}
   AllPages:
   - {fileID: 1029889096}
   - {fileID: 1746980995}
   - {fileID: 256769612}
   - {fileID: 2036867584}
   ActivePage: {fileID: 1029889096}
-  AllButtons:
-  - {fileID: 2137349721}
-  - {fileID: 1457925523}
-  - {fileID: 1989150817}
-  - {fileID: 1317601373}
   leftAnchor: {fileID: 183790549}
   rightAnchor: {fileID: 1284762105}
-  ExitPopup: {fileID: 2036867584}
 --- !u!114 &1782708006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10439,9 +10447,16 @@ PrefabInstance:
       propertyPath: m_text
       value: '
 
-        This alien seems to be of a prey species. We have observed
-        changes in the speed of the spinning outer ring of spikes and changes in
-        the colour of the centre eye.'
+        This alien seems to be of a prey species as suggested by
+        its rejection of meat. We have observed changes in the speed of the spinning
+        outer ring of spikes and changes in the colour of the centre eye. It doesn''t
+        seem to like our presence, it''s eye always seem to change to a shade of
+        purple. It only seems to allow us to get closer when we approach it with
+        a cookie, resulting in the eye changing its shade to yellow. Never thought
+        an Alien would have a sweet tooth.
+
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 4268740005714076318, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: m_Pivot.x
