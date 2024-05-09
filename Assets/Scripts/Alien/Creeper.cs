@@ -116,7 +116,7 @@ public class Creeper : Alien
     {
         // Walk towards the player and stop a certain distance away
         nav.SetDestination(PlayerTransform.position);
-        nav.stoppingDistance = baseDistance - relationship + playersTool();
+        nav.stoppingDistance = baseDistance + playersTool();
         MoveFromPlayer();
     }
     // Move away from the player if the Creeper is too close
