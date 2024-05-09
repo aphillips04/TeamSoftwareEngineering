@@ -251,6 +251,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach(Tools enumVal in Enum.GetValues(typeof(Tools)) )
         {
+            if (enumVal == Tools.Item_Oscilliscope) continue;
             Tool t = gameObject.AddComponent<Tool>();
             t.toolType = enumVal;
             ToolInventory.Add(t);

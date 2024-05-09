@@ -32,8 +32,8 @@ public abstract class Alien : MonoBehaviour
     protected List<WeightedDelegate> allActions;
 
     public PlayerController playerscript;
-    public Vector3 RoomP1;
-    public Vector3 RoomP2;
+    public GameObject RoomP1obj;
+    public GameObject RoomP2obj;
     protected bool lostInterest = false;
 
     //tbh start and update dont need to be here but oh well
@@ -42,6 +42,8 @@ public abstract class Alien : MonoBehaviour
     public abstract void React(Tool tool);
     protected void DoIdleMovement(Vector3 navDest)
     {
+        Vector3 RoomP1 = RoomP1obj.transform.position;
+        Vector3 RoomP2 = RoomP2obj.transform.position;
         // only change desitnation if the alien is close to the current one
         Vector3 playerPos = playerscript.gameObject.transform.position;playerPos.y = 0.08f;
         if (
