@@ -7,7 +7,9 @@ using System.Linq;
 public class DayCycle : MonoBehaviour
 {
     public Book BookUI;
-    [HideInInspector] public int exhaustionMeter = 0;
+    [Tooltip("Must be a whole number")]
+    public float actions = 8;
+    [HideInInspector] public float exhaustionMeter = 0;
     PlayerController playerController;
     // Start is called before the first frame update
     void Start()

@@ -565,7 +565,7 @@ MonoBehaviour:
   RoomP2obj: {fileID: 444629193}
   playerscript: {fileID: 648720990}
   myPage: {fileID: 256769614}
-  FatigueModifier: 2
+  FatigueModifier: 1.1
   FatigueDecayRate: 0.1
   EmotionFatigue:
   - 0
@@ -578,6 +578,7 @@ MonoBehaviour:
   EmotionDecayRate: 0
   InterestLevel: 0.5
   InterestDecayRate: 0.000061035156
+  InterestAction: 0.125
 --- !u!195 &69500701
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1180,7 +1181,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3905,6 +3906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BookUI: {fileID: 1782708005}
+  actions: 8
   exhaustionMeter: 0
 --- !u!1 &663668629
 GameObject:
@@ -5694,7 +5696,7 @@ MonoBehaviour:
   RoomP2obj: {fileID: 63915787}
   playerscript: {fileID: 648720990}
   myPage: {fileID: 1746980997}
-  FatigueModifier: 2
+  FatigueModifier: 1.1
   FatigueDecayRate: 0.1
   EmotionFatigue:
   - 0
@@ -5707,6 +5709,7 @@ MonoBehaviour:
   EmotionDecayRate: 0
   InterestLevel: 0.5
   InterestDecayRate: 0.000061035156
+  InterestAction: 0.125
 --- !u!4 &1014949779
 Transform:
   m_ObjectHideFlags: 0
@@ -7352,7 +7355,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '
 
-    Controls:
+    Controls
+
 
     Move Forward = W
 
@@ -7363,23 +7367,20 @@ MonoBehaviour:
 
     Move Left = D
 
-    Jump = Space
-
     Look = Mouse
 
 
 
-    Interact (Door)
-    = E
+    Interact (Door) = E
 
-    Interact (Alien) = Left Mouse
+    Interact
+    (Alien) = Left Mouse
 
     Change Tool = Scroll
 
 
 
-    Open
-    Folder = Tab'
+    Open Folder = Tab'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7413,7 +7414,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -7568,7 +7569,7 @@ GameObject:
   - component: {fileID: 1381814784}
   - component: {fileID: 1381814787}
   - component: {fileID: 1381814788}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

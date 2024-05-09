@@ -102,8 +102,8 @@ public class PlayerController : MonoBehaviour
         if (UI.BookUI.enabled) return;
         
         // Handle exhaustion
-        if (dayCycle.exhaustionMeter == 100) { NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!"); return; }
-        dayCycle.exhaustionMeter += 25;
+        if (dayCycle.exhaustionMeter >= 100f) { NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!"); return; }
+        dayCycle.exhaustionMeter += 100f / dayCycle.actions;
 
         // Use the active tool with a ray cast forward from camera
         ActiveTool.Use(new Ray(mainCamera.transform.position, mainCamera.transform.forward));

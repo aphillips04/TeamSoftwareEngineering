@@ -73,7 +73,7 @@ public class DoorScript : MonoBehaviour
         if (restDoor)
         {
             // If not tired, tell them to interact with the aliens
-            if (dayCycle.exhaustionMeter == 100) fader.fadeToBlack(3);
+            if (dayCycle.exhaustionMeter >= 100f) fader.fadeToBlack(3);
             else NotifSys.system.notify("You are not tired enough to rest!\nGo interect with the aliens.");
 
         }
