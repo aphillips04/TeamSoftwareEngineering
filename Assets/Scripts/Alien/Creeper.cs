@@ -16,13 +16,14 @@ public class Creeper : Alien
         private set { }
     }
     #endregion
-    
+
     //private Dictionary<EmotionsEnum, double> Emotions = new Dictionary<EmotionsEnum, double>();
     //this is a dictionary here but using an enum I suppose you could also assign each one an int value (in the enum) and then it can be a straight array
     //not entirely sure this is an important implementation decision
     //but *technically* we don't *need* a dictionary since we only need to store one float per member of the enum and that is all known at compile time
     //I think i'm just trying to over-optimise (getting a bit c++ brained with arrays vs "real" generic containers)
 
+    private Animator animator;
     private PlayerUIManager UIManager;
     public Transform PlayerTransform;
     public float EmotionDecayRate = 0;
@@ -37,10 +38,19 @@ public class Creeper : Alien
     /// </summary>
     /// 
     private GameObject player;
+    private SkinnedMeshRenderer EyeRenderer;
+
     public override void Start()
     {
+        animator = gameObject.GetComponentInChildren<Animator>();
+        SkinnedMeshRenderer[] renderCandidates = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer render in renderCandidates)
+        {
+            if (render.CompareTag("CreeperEye"))
+                EyeRenderer = render;
+        }
         //THESE NEED MOVING AT SOME POINT
-        Emotions[(int)(EmotionsEnum.Happiness)] = 5;
+        Emotions[(int)(EmotionsEnum.Happiness)] =5;
         Emotions[(int)(EmotionsEnum.Calmness)] = 5;
 
         BaseEmotions[(int)(EmotionsEnum.Happiness)] = 5;
@@ -68,11 +78,24 @@ public class Creeper : Alien
     /// </summary>
     public override void Update()
     {
-        // Set the colour of the alien based on its happiness
+        // Set the speed of the alien based on its happiness
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
-        
-        
-        // Set the spin speed of the alien based on its calmness
+        //Debug.Log(nav.speed); default is 3.5
+        if (happiness >= (20.0f / 3.0f)) { 
+            animator.SetBool("Sitting", true);
+            nav.speed = 0;
+        }
+        else
+        {
+            animator.SetBool("Sitting", false);
+            nav.speed = 7 - ((happiness / 10.0f) * 7);
+        }
+        float calmness = Emotions[(int)EmotionsEnum.Calmness];
+        Color eyeColour = Color.Lerp(Color.red, Color.white, calmness / 10.0f);
+        EyeRenderer.material.color = eyeColour;
+
+        // Set the eye colour of the alien based on its calmness
+
 
         DecayEmotions(Emotions,BaseEmotions,EmotionDecayRate);
         DecayEmotions(EmotionFatigue, BaseEmotionFatigue, FatigueDecayRate);
@@ -124,19 +147,19 @@ public class Creeper : Alien
         Debug.Log(string.Format("reacted to {0}", tool.toolType));
         if (tool.toolType == Tools.Touch_Gently)
         {
-            UpdateEmotion(EmotionsEnum.Happiness, 1);
+            UpdateEmotion(EmotionsEnum.Happiness, -1);
         }
         else if (tool.toolType == Tools.Touch_Roughly)
         {
-            UpdateEmotion(EmotionsEnum.Happiness,- 1);
+            UpdateEmotion(EmotionsEnum.Happiness, 1);
         }
         else if (tool.toolType == Tools.Feed_Treat)
         {
-            UpdateEmotion(EmotionsEnum.Calmness, 1);
+            UpdateEmotion(EmotionsEnum.Calmness, -1);
         }
         else if (tool.toolType == Tools.Feed_LiveAnimal)
         {
-            UpdateEmotion(EmotionsEnum.Calmness,- 1);
+            UpdateEmotion(EmotionsEnum.Calmness, 1);
         }
         else if (tool.toolType == Tools.Item_Oscilliscope)
         {
@@ -162,42 +185,41 @@ public class Creeper : Alien
     }
     public override void TryUnlockCombos()
     {
-        activePage = book.ActivePage.GetComponent<PageScript>();
-        CurrentCombos = book.GetCurrentCombos();
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         float calmness = Emotions[(int)EmotionsEnum.Calmness];
-        if (happiness > (1.0f / 3.0f))
+        if (happiness > (20.0f / 3.0f))
         {
             //if happiness high
-            activePage.ActivateCombo("HappyHigh");
-                        
+            myPage.ActivateCombo("HappyHigh");
+
         }
-        else if ((happiness < (1.0f/3.0f)) || (happiness > (-1.0f / 3.0f))){
+        else if ((happiness < (20.0f / 3.0f)) || (happiness > (10.0f / 3.0f)))
+        {
             //happiness middle
-            activePage.ActivateCombo("HappyMid");
+            myPage.ActivateCombo("HappyMid");
         }
-        else if (happiness < (-1.0f / 3.0f))
+        else if (happiness < (10.0f / 3.0f))
         {
             //happiness low
-            activePage.ActivateCombo("HappyLow");
+            myPage.ActivateCombo("HappyLow");
         }
 
-        if (calmness > (1.0f / 3.0f))
+        if (calmness > (20.0f / 3.0f))
         {
             //if calmness high
-            activePage.ActivateCombo("CalmHigh");
+            myPage.ActivateCombo("CalmHigh");
 
         }
-        else if ((calmness < (1.0f / 3.0f)) || (calmness > (-1.0f / 3.0f)))
+        else if ((calmness < (20.0f / 3.0f)) || (calmness > (10.0f / 3.0f)))
         {
             //calmness middle
-            activePage.ActivateCombo("CalmMid");
+            myPage.ActivateCombo("CalmMid");
         }
-        else if (calmness < (-1.0f / 3.0f))
+        else if (calmness < (10.0f / 3.0f))
         {
             //calmness low
 
-            activePage.ActivateCombo("CalmLow");
+            myPage.ActivateCombo("CalmLow");
         }
     }
     protected override void InitActions()

@@ -572,7 +572,7 @@ MonoBehaviour:
   ToPlayer: 0
   InterestLevel: 0.5
   InterestDecayRate: 0.000061035156
-  baseDistance: 20
+  baseDistance: 10
 --- !u!195 &69500701
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4271,6 +4271,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8424403616797056267, guid: 442a5d98c3d5606419268500272f1a66, type: 3}
+      propertyPath: m_TagString
+      value: CreeperEye
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5690,7 +5694,7 @@ MonoBehaviour:
   ToPlayer: 0
   InterestLevel: 0.5
   InterestDecayRate: 0.000061035156
-  baseDistance: 20
+  baseDistance: 15
 --- !u!4 &1014949779
 Transform:
   m_ObjectHideFlags: 0
