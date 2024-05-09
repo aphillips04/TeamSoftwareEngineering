@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask GroundLayers;
     [Tooltip("Layers that count as the player itself")]
     public LayerMask PlayerLayers;
+    Vector3 groundedSpherePos;
 
     [Header("Input")]
     private Vector2 movementInput;
@@ -67,7 +68,6 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    Vector3 groundedSpherePos; // TODO! NEEDS MOVING TO APPROPRIATE SECTION ABOVE
     #region unityMethods
     // Start is called before the first frame update
     void Start()
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
         {
             // Stop falling, allow jumping and clamp vertical velocity when grounded
             if (currentVerticalVelocity < 0.0f) currentVerticalVelocity = -2f;
-            // Math taken from FPSexample [TODO! reference]
+            // Math taken from FPSexample [https://assetstore.unity.com/packages/essentials/starterassets-firstperson-updates-in-new-charactercontroller-pac-196525]
             // square root of H multipled by -2 multiplied by gravity = velocity required to reach desired height
             if (jumpInput) currentVerticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
         }

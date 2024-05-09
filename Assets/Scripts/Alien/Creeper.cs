@@ -23,6 +23,8 @@ public class Creeper : Alien
     public float EmotionDecayRate = 0;
     public float InterestLevel = 0.5f; // This is a level from -1 to 1, larger absolute values indicate more interest (be that negative or positive interest)
     public float InterestDecayRate = 1f/16384f; // This determines the rate at which the interest will decay back to neutral
+    public float InterestAction = 0.125f; // This determines the interest gain after an action
+    private float InterestThreshold = 0.4f; // This determines the threshold for the alien to stay interested
 
     [HideInInspector]
     // Relationship is calculated from the emotion values.
@@ -99,18 +101,14 @@ public class Creeper : Alien
     // FixedUpdate is an alternative update, called once per tick at a fixed rate
     void FixedUpdate()
     {
-        // TODO!
+        // Decay towards 0
         InterestLevel += InterestLevel == 0 ? 0 : (InterestLevel < 0 ? InterestDecayRate : -InterestDecayRate);
+        // Resets nav.destination to current player position to stop alien getting stuck
         if (Math.Abs(InterestLevel) < 0.3 && !lostInterest) { lostInterest = true; nav.SetDestination(PlayerTransform.position); }
         else if (Math.Abs(InterestLevel) > 0.3 && lostInterest) lostInterest = false;
 
         if (Math.Abs(InterestLevel) < 0.3 || !InCreeperRoom()) DoIdleMovement(nav.destination); // RoomP1 = (47.5, 0, 46.5) RoomP2 = (-18.5, 0, 22.5)
-        else
-        {
-            // Move to a point defined by the player's positon
-            DoPlayerDistance();
-            MoveFromPlayer();
-        }
+        else DoPlayerDistance();
     }
     #endregion
     // Set the distance away from the player the Creeper will stay
@@ -119,15 +117,16 @@ public class Creeper : Alien
         // Walk towards the player and stop a certain distance away
         nav.SetDestination(PlayerTransform.position);
         nav.stoppingDistance = baseDistance - relationship + playersTool();
+        MoveFromPlayer();
     }
     // Move away from the player if the Creeper is too close
     void MoveFromPlayer()
     {
         Vector3 ToPlayer = player.transform.position - transform.position;
-        // If the stopping distance is bigger than the current distance
+        // If still outside the stopping distance
         if (Vector3.Magnitude(ToPlayer) < nav.stoppingDistance - 1)
         {
-            // Move away
+            // Twice the stopping distance, directed away from the player
             Vector3 targetPosition = ToPlayer.normalized * nav.stoppingDistance * -2;
             nav.destination = targetPosition;
         }
@@ -172,18 +171,20 @@ public class Creeper : Alien
         // Update the interest value as a tool has been used 
         UpdateInterest(tool.toolType);
     }
-    // TODO!
+    // Updates the interest by a set amount after an action.
+    // If the update would cause the alien to become 
+    // uninterested set it to the threshold plus the gain
     protected override void UpdateInterest(Tools type)
     {
         if (type == Tools.Touch_Gently || type == Tools.Feed_Treat)
         {
-            if (InterestLevel < 0f && InterestLevel >= -0.425f) InterestLevel = 0.425f;
-            else InterestLevel += 0.125f;
+            if (InterestLevel < 0f && InterestLevel >= -InterestThreshold - InterestAction) InterestLevel = InterestThreshold + InterestAction;
+            else InterestLevel += InterestAction;
         }
         else if (type == Tools.Touch_Roughly || type == Tools.Feed_LiveAnimal)
         {
-            if (InterestLevel > 0f && InterestLevel <= 0.425f) InterestLevel = -0.425f;
-            else InterestLevel -= 0.125f;
+            if (InterestLevel > 0f && InterestLevel <= InterestThreshold + InterestAction) InterestLevel = -InterestThreshold - InterestAction;
+            else InterestLevel -= InterestAction;
         }
         if (InterestLevel > 1) InterestLevel = 1;
         else if (InterestLevel < -1) InterestLevel = -1;
