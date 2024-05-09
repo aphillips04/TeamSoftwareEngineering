@@ -37,8 +37,10 @@ public class PlayerUIManager : MonoBehaviour
     void Start()
     {
         //Debug.Log("Hello World!");
-        MainUI.enabled = true;
-        BookUI.enabled = false;
+        MainUI.enabled = false;
+        BookUI.enabled = true;
+        ToggleUI();
+        ToggleUI();
     }
 
     // Update is called once per frame
@@ -61,6 +63,7 @@ public class PlayerUIManager : MonoBehaviour
         foreach (Tool tool in ToolInventory)
         {
             GameObject g = Instantiate(HotbarPrefab, MainUI.transform);
+            g.transform.SetAsFirstSibling();
             g.SendMessage("SelectToolIcon", tool.toolType);
             Hotbar.Add(g);
         }

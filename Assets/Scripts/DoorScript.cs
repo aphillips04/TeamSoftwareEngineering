@@ -6,6 +6,10 @@ public class DoorScript : MonoBehaviour
 {
     public float movementConstant;
     public float offset;
+    public bool restDoor = false;
+    public DayCycle dayCycle;
+    public Fader fader;
+  
     enum DoorState
     {
         idleBottom,
@@ -26,6 +30,7 @@ public class DoorScript : MonoBehaviour
     }
     private void Update()
     {
+
         switch (state)
         {
             case DoorState.idleBottom:
@@ -107,11 +112,18 @@ public class DoorScript : MonoBehaviour
     }
     public void OnPlayerInteract()
     {
-        Debug.Log("Player interacted with door");
-        if (state == DoorState.idleBottom)
+        //Debug.Log("Player interacted with door");
+        if (restDoor)
+        {
+            if (dayCycle.exhaustionMeter == 100) fader.fadeToBlack(3);
+            else NotifSys.system.notify("You are not tired enough to rest!\nGo interect with the aliens.");
+
+        }
+        else if (state == DoorState.idleBottom)
         {
             state = DoorState.MovingUp;
             timer = 0.75f;
         }
     }
+   
 }

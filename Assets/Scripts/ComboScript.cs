@@ -13,7 +13,7 @@ public class ComboScript : MonoBehaviour
     public TMP_Dropdown dropdown;
     public int correctIndex;
     public bool discovered = false;
-    public bool correct = false;
+  
     void Start()
     {
         shownVer.SetActive(discovered);
@@ -31,15 +31,10 @@ public class ComboScript : MonoBehaviour
             //
         }
     }
-    private void CheckCorrect()
+    public bool CheckCorrect()
     {
-        if (dropdown.value == correctIndex) 
-        {
-            correct = true;
-        }
-        else
-        {
-            correct = false;
-        }
+        return dropdown.value == correctIndex; 
+
+
     }
 }

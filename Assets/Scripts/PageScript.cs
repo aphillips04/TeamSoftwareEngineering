@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using System.Xml.Linq;
 
 public class PageScript : MonoBehaviour
 {
@@ -21,8 +22,11 @@ public class PageScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Debug.Log("TESCO");
+        //AlienNamestr = "Subject 241 \n The Witness";
         NameText = AlienName.GetComponent<TextMeshProUGUI>();
         DescText = AlienDescription.GetComponent<TextMeshProUGUI>();
+        BuildPages();
     }
 
     // Update is called once per frame
@@ -51,8 +55,8 @@ public class PageScript : MonoBehaviour
 
     private void BuildLeftPage()//make sure to call this when instantiating pages
     {
-        NameText.text = AlienNamestr;
-        DescText.text = AlienDescstr;
+        //NameText.text = AlienNamestr;
+        //DescText.text = AlienDescstr;
     }
     public void ActivateCombo(string name)
     {
@@ -69,7 +73,7 @@ public class PageScript : MonoBehaviour
         int output = 0;
         foreach (ComboScript cs in ComboScriptInstances)
         {
-            if (cs.correct)
+            if (cs.CheckCorrect())
             {
                 output++;
             }

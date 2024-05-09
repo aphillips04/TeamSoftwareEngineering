@@ -38,7 +38,6 @@ public class StarAlien : Alien
     /// Start is the initial setup function, called before the first frame update
     /// </summary>
     /// 
-
     private GameObject player;
     public override void Start()
     {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using UnityEngine.UI;
+using System.Threading;
 
 public class PlayerController : MonoBehaviour
 {
@@ -44,10 +46,13 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
 
     //components
+    public GameObject player;
+    private DayCycle dayCycle;
     private CharacterController controller;
     private GameObject mainCamera;
     public Tool ActiveTool;
     private int _toolIndex;
+    public UnityEngine.UI.Image canvas;
     private int ToolIndex
     {
         get { return _toolIndex; }
@@ -75,13 +80,14 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        dayCycle = GetComponent<DayCycle>();
 
         UI = GetComponent<PlayerUIManager>();
         AddAllTools();
         this.ActiveTool = ToolInventory[0];
         UI.ToolInventory = ToolInventory;
         UI.InitHotbar(); // I wanted to do this in start() of UIManager but the inventory NEEDS to be initalised first 
-    }
+     }
 
     // Update is called once per frame
     void Update()
@@ -109,7 +115,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log("E");
         Ray r = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         Debug.DrawRay(r.origin, r.direction, Color.green, 2.5f);
-        if (Physics.Raycast(r, out RaycastHit hit, 2.5f,~PlayerLayers))
+        if (Physics.Raycast(r, out RaycastHit hit, 10f,~PlayerLayers))
         {
             hit.collider.SendMessage("OnPlayerInteract");
             //anything you can press "e" on will have a public funtion OnPlayerInteract that will do whatever it needs to when pressed
@@ -220,6 +226,12 @@ public class PlayerController : MonoBehaviour
     }
     public void UseTool()
     {
+        if (UI.BookUI.enabled)
+        {
+            return;
+        }
+        if (dayCycle.exhaustionMeter == 100) { NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!"); return; }
+        dayCycle.OnAction();
         Ray r = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
         ActiveTool.Use(r);
 
@@ -249,4 +261,13 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(groundedSpherePos, 0.5f);
     }
+    //public void fadeToBlack()
+    //{
+    //    float counter = 3;
+
+    //    counter -= Time.deltaTime;
+    //    Color color = new Color (0, 0, 0, counter/3);
+    //    canvas.GetComponent<UnityEngine.UI.Image>().color = color;
+
+    //}
 }

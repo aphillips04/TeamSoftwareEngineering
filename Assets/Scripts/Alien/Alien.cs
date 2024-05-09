@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 public abstract class Alien : MonoBehaviour
 {
-    protected UnityEngine.AI.NavMeshAgent nav;
+    protected NavMeshAgent nav;
     public PageScript myPage;
     protected enum EmotionsEnum {Happiness, Calmness} //just examples for now
     public GameObject BookUI;
