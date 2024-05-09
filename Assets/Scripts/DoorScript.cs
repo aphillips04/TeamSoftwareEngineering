@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class DoorScript : MonoBehaviour
 {
-    public float movementConstant;
-    public float offset;
-    public bool restDoor = false;
+    [Header("References")]
     public DayCycle dayCycle;
     public Fader fader;
   
+    [Header("Constants")]
+    public float movementConstant;
+    public float offset;
+    public bool restDoor = false;
+
     enum DoorState
     {
-        idleBottom,
-        idleTop,
+        IdleBottom,
+        IdleTop,
         MovingUp,
         MovingDown
     }
@@ -23,107 +26,61 @@ public class DoorScript : MonoBehaviour
     private Vector3 upPos;
     private void Start()
     {
+        // Assign values to vars
         timer = 0f;
-        state = DoorState.idleBottom;
+        state = DoorState.IdleBottom;
         originalPos = transform.position;
         upPos = new Vector3(transform.position.x, transform.position.y + offset, transform.position.z);
     }
     private void Update()
     {
-
         switch (state)
         {
-            case DoorState.idleBottom:
-                //do nothing
+            case DoorState.IdleBottom:
                 break;
-            case DoorState.idleTop:
-                UpdateTimer();
+            case DoorState.IdleTop:
+                if (timer > 0) timer -= Time.deltaTime;
+                else timer = 0f;
+
                 if (timer == 0f)
                 {
-                    //if next state
                     state = DoorState.MovingDown;
                     timer = .75f;
                 }
                 break;
             case DoorState.MovingUp:
-                //UpdateTimer();
                 if (Mathf.Abs(transform.position.y - upPos.y) >=0.1f)
-                {
                     transform.position = Vector3.Lerp(transform.position, upPos, Time.deltaTime * movementConstant);
-                }
                 else
                 {
-                    state = DoorState.idleTop;
+                    state = DoorState.IdleTop;
                     timer = 2f;
                 }
-                /*
-                if (timer == 0f)
-                {
-                    //if next state
-                    state = DoorState.idleTop;
-                    timer = 2f;
-                }
-                else
-                {
-                    //move door
-                    transform.position = new Vector3(transform.position.x, transform.position.y + Time.deltaTime * movementConstant + transform.position.z);
-                }
-                */
                 break;
             case DoorState.MovingDown:
-                // UpdateTimer();
                 if (Mathf.Abs(transform.position.y - originalPos.y) >= 0.1f)
-                {
                     transform.position = Vector3.Lerp(transform.position, originalPos, Time.deltaTime * movementConstant);
-                }
-                else
-                {
-                    state = DoorState.idleBottom;
-                }
-                /*
-                if (timer == 0f)
-                {
-                    //if next state
-                    state = DoorState.idleBottom;
-                }
-                else
-                {
-                    //move door
-                    transform.position = new Vector3(transform.position.x, transform.position.y - Time.deltaTime * movementConstant + transform.position.z);
-                }
-                */
+                else state = DoorState.IdleBottom;
                 break;
             default:
                 Debug.Log("impossible thing happened");
                 break;
         }
-        
     }
-    private void UpdateTimer()
-    {
-        if (timer > 0)
-        {
-            timer -= Time.deltaTime;
-        }
-        else
-        {
-            timer = 0f;
-        }
-    }
+    // Handle interactions with the doors
     public void OnPlayerInteract()
     {
-        //Debug.Log("Player interacted with door");
         if (restDoor)
         {
-            if (dayCycle.exhaustionMeter == 100) fader.fadeToBlack(3);
+            // If not tired, tell them to interact with the aliens
+            if (dayCycle.exhaustionMeter >= 100f) fader.fadeToBlack(3);
             else NotifSys.system.notify("You are not tired enough to rest!\nGo interect with the aliens.");
 
         }
-        else if (state == DoorState.idleBottom)
+        else if (state == DoorState.IdleBottom)
         {
             state = DoorState.MovingUp;
             timer = 0.75f;
         }
-    }
-   
+    }  
 }

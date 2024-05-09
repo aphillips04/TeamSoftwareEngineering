@@ -6,6 +6,7 @@ using TMPro;
 
 public class ComboScript : MonoBehaviour
 {
+    [Header("")]
     public List<string> placeholderTexts;
     public string comboName;
     public GameObject hiddenVer;
@@ -19,22 +20,15 @@ public class ComboScript : MonoBehaviour
         shownVer.SetActive(discovered);
         hiddenVer.SetActive(!discovered);
     }
-
     // Update is called once per frame
     void Update()
     {
-       // if (discovered)
-        {
-            hiddenVer.SetActive(!discovered);
-            shownVer.SetActive(discovered);
-            //show
-            //
-        }
+        hiddenVer.SetActive(!discovered);
+        shownVer.SetActive(discovered);
     }
+    // Check if the selected value is correct
     public bool CheckCorrect()
     {
-        return dropdown.value == correctIndex; 
-
-
+        return dropdown.value == correctIndex;
     }
 }
