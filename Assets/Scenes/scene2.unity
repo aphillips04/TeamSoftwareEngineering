@@ -10596,7 +10596,7 @@ PrefabInstance:
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.data[5]
       value: 
-      objectReference: {fileID: 6006524300247969830, guid: bf8220917b612fb4680de978d0c4de47, type: 3}
+      objectReference: {fileID: 6006524300247969830, guid: 253055534c731a942966edf93557db36, type: 3}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: AllAlienNames.Array.data[0]
       value: Star

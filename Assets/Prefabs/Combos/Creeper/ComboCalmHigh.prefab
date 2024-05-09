@@ -1261,7 +1261,7 @@ MonoBehaviour:
   shownVer: {fileID: 7903901226401090601}
   dropdown: {fileID: 6224447748322765662}
   correctIndex: 2
-  discovered: 1
+  discovered: 0
 --- !u!1 &6723424108330425721
 GameObject:
   m_ObjectHideFlags: 0
