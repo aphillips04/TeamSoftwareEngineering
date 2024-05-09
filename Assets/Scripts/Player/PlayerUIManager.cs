@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
 public class PlayerUIManager : MonoBehaviour
 {
+    [Header("Cavases")]
     public Canvas MainUI;
     public Canvas BookUI;
+    
     [Header("Hotbar")]
     public GameObject HotbarPrefab;
     public Vector2 HotbarCenter;
@@ -23,11 +23,13 @@ public class PlayerUIManager : MonoBehaviour
         get { return _activeIndex; }
         set
         {
+            // Update active hotbar cell as well as value
             Hotbar[_activeIndex].SendMessage("Deactivate");
             _activeIndex = value;
             Hotbar[_activeIndex].SendMessage("Activate");
         }
     }
+
     [Header("Progress Bar")]
     public GameObject ProgressBarPrefab;
     private Image RelationshipFill;
@@ -37,27 +39,20 @@ public class PlayerUIManager : MonoBehaviour
     void Start()
     {
         //Debug.Log("Hello World!");
-        MainUI.enabled = false;
-        BookUI.enabled = true;
-        ToggleUI();
+        MainUI.enabled = true;
         ToggleUI();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Update hotbar
         DrawHotbar();
-        if (RelationshipFill != null)
-        {
-            if (RelationshipFill.fillAmount < targetFill)
-            {
-                RelationshipFill.fillAmount += 0.1f * Time.deltaTime;
-            } else if (RelationshipFill.fillAmount > targetFill)
-            {
-                RelationshipFill.fillAmount -= 0.1f * Time.deltaTime;
-            }
-        }
+
+        if (RelationshipFill.fillAmount < targetFill) RelationshipFill.fillAmount += 0.1f * Time.deltaTime;
+        else if (RelationshipFill.fillAmount > targetFill) RelationshipFill.fillAmount -= 0.1f * Time.deltaTime;
     }
+    // Create hotbar cell for each tool in inventory
     public void InitHotbar()
     {
         foreach (Tool tool in ToolInventory)
@@ -69,27 +64,20 @@ public class PlayerUIManager : MonoBehaviour
         }
         Hotbar[_activeIndex].SendMessage("Activate");
     }
+    // Recalculate position and reposition each hotbar cell
     void DrawHotbar()
     {
         int HotbarCount = ToolInventory.Count;
+        // Find half width of hotbar, biased low
         float HotbarHalfWidth;
-        if (HotbarCount % 2 == 0)
-        {
-            HotbarHalfWidth = HotbarCount * BoxWidth * 0.5f;
-
-        }
-        else
-        {
-            HotbarHalfWidth = Mathf.Floor(HotbarCount / 2) * BoxWidth;
-        }
+        if (HotbarCount % 2 == 0) HotbarHalfWidth = HotbarCount * BoxWidth * 0.5f;
+        else HotbarHalfWidth = Mathf.Floor(HotbarCount / 2) * BoxWidth;
+        
+        // Set position of each cell
         float HotbarStart = HotbarCenter.x - HotbarHalfWidth;
         for (int i = 0; i < HotbarCount; i++)
-        {
             Hotbar[i].transform.localPosition = HotbarTransform.transform.localPosition + new Vector3(HotbarStart + BoxWidth * i, 0,0);
-        }
-
     }
-
     public void InitRelationshipBar()
     {
         Color background = new Color(.267f, .267f, .267f);
@@ -126,6 +114,7 @@ public class PlayerUIManager : MonoBehaviour
         targetFill = (float)Math.Round(relationship / 10, 2, MidpointRounding.AwayFromZero);
         RelationshipFill.fillAmount = targetFill;
     }
+    // Update variables related to which UI is currently active
     public void ToggleUI()
     {
         if (MainUI.enabled)
@@ -142,7 +131,7 @@ public class PlayerUIManager : MonoBehaviour
         }
         Cursor.lockState = GetCursorMode();
     }
-    //
+    // Internalise the cursor lock state
     public CursorLockMode GetCursorMode()
     {
         return CursorLock ? CursorLockMode.Locked : CursorLockMode.Confined;
