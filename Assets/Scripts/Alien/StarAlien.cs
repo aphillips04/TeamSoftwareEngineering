@@ -58,7 +58,7 @@ public class StarAlien : Alien
         {
            BaseEmotionFatigue[i] = 1.0f;
         }
-        EmotionFatigue = BaseEmotionFatigue;
+        Array.Copy(BaseEmotionFatigue, EmotionFatigue, BaseEmotionFatigue.Length);
         nav = GetComponent<NavMeshAgent>();
 
         player = GameObject.FindGameObjectWithTag("Player");
@@ -88,8 +88,8 @@ public class StarAlien : Alien
         
         // Set the spin speed of the alien based on its calmness
 
-        DecayEmotions(Emotions,BaseEmotions,EmotionDecayRate);
-        DecayEmotions(EmotionFatigue, BaseEmotionFatigue, FatigueDecayRate);
+        DecayEmotions(ref Emotions, BaseEmotions,  EmotionDecayRate);
+        DecayEmotions(ref EmotionFatigue,  BaseEmotionFatigue, FatigueDecayRate);
 
         if (Math.Abs(InterestLevel) > 0.3 && InStarRoom()) transform.LookAt(player.transform.position);
     }

@@ -523,7 +523,7 @@ Transform:
   m_GameObject: {fileID: 63915787}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.3, y: 0, z: 20.176}
+  m_LocalPosition: {x: -18.49, y: 0, z: 22.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -562,8 +562,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myPage: {fileID: 256769614}
   BookUI: {fileID: 1782708004}
-  FatigueModifier: 4
+  FatigueModifier: 2
   FatigueDecayRate: 0.1
+  EmotionFatigue:
+  - 0
+  - 0
+  BaseEmotionFatigue:
+  - 0
+  - 0
   playerscript: {fileID: 648720990}
   RoomP1obj: {fileID: 1000831543}
   RoomP2obj: {fileID: 444629193}
@@ -2278,7 +2284,7 @@ Transform:
   m_GameObject: {fileID: 444629193}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.755, y: 0, z: 20.176}
+  m_LocalPosition: {x: 14.48, y: 0, z: 23.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5602,7 +5608,7 @@ Transform:
   m_GameObject: {fileID: 1000831543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.84, y: 0, z: 48.607}
+  m_LocalPosition: {x: -13.73, y: 0, z: 46.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5684,8 +5690,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myPage: {fileID: 1746980997}
   BookUI: {fileID: 1782708004}
-  FatigueModifier: 4
+  FatigueModifier: 2
   FatigueDecayRate: 0.1
+  EmotionFatigue:
+  - 0
+  - 0
+  BaseEmotionFatigue:
+  - 0
+  - 0
   playerscript: {fileID: 648720990}
   RoomP1obj: {fileID: 1684786708}
   RoomP2obj: {fileID: 63915787}
@@ -9504,7 +9516,7 @@ Transform:
   m_GameObject: {fileID: 1684786708}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -49.547, y: 0, z: 48.607}
+  m_LocalPosition: {x: -47.69, y: 0, z: 46.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

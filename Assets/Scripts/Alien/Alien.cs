@@ -13,16 +13,16 @@ public abstract class Alien : MonoBehaviour
     protected Book book;
     protected List<ComboScript> CurrentCombos;
     protected PageScript activePage;
-    public float FatigueModifier = 4.0f; // Fatigue modifier -- this is a divisor -- higher values will make the alien respond LESS to each repeated action -- response decays to normal over time
-    public float FatigueDecayRate = .1f; // Affects how quickly fatigue decays back to normal
+    public float FatigueModifier = 1.0f; // Fatigue modifier -- this is a divisor -- higher values will make the alien respond LESS to each repeated action -- response decays to normal over time
+    public float FatigueDecayRate = 10.0f; // Affects how quickly fatigue decays back to normal
     protected struct WeightedDelegate
     {
         public float Weight;
         public Action action;
     }
     protected float[] Emotions = new float[Enum.GetNames(typeof(EmotionsEnum)).Length]; // when emotions need to be accesed do Emotions[(int)_emotionName_]
-    protected float[] EmotionFatigue = new float[Enum.GetNames(typeof(EmotionsEnum)).Length];
-    protected float[] BaseEmotionFatigue = new float[Enum.GetNames(typeof(EmotionsEnum)).Length];
+    public float[] EmotionFatigue = new float[Enum.GetNames(typeof(EmotionsEnum)).Length];
+    public float[] BaseEmotionFatigue = new float[Enum.GetNames(typeof(EmotionsEnum)).Length];
     protected float[] BaseEmotions = new float[Enum.GetNames(typeof(EmotionsEnum)).Length];
 
     protected bool needNewAction = true;
@@ -73,7 +73,7 @@ public abstract class Alien : MonoBehaviour
     protected void UpdateEmotion(EmotionsEnum emotion, float value) //always use UpdateEmotion for runtime updates as it will affect the fatigue
     {
         float currentValue = Emotions[(int)emotion];
-        //Debug.Log(EmotionFatigue[(int)emotion]);
+        Debug.Log(EmotionFatigue[(int)emotion]);
         float newValue = currentValue+ (value * EmotionFatigue[(int)emotion]);
         if (newValue < 0)
             newValue = 0;
@@ -81,6 +81,7 @@ public abstract class Alien : MonoBehaviour
             newValue = 10;
         Emotions[(int)emotion] = newValue;
         EmotionFatigue[(int)emotion] /= FatigueModifier;
+        Debug.Log("Emotion change " + currentValue + "to " + newValue);
     }
     protected void SetEmotion(EmotionsEnum emotion, float newValue)
     {
@@ -94,7 +95,7 @@ public abstract class Alien : MonoBehaviour
     {
        return Emotions[(int)emotion];
     }
-    protected void DecayEmotions(float[] _Emotions, float[] _BaseEmotions, float _DecayRate)
+    protected void DecayEmotions(ref float[] _Emotions,  float[] _BaseEmotions,  float _DecayRate)
     {
         for (int i = 0; i < _Emotions.Length; i++)
         {
