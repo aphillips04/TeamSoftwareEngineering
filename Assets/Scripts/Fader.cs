@@ -6,20 +6,21 @@ using UnityEngine.UI;
 
 public class Fader : MonoBehaviour
 {
-    public GameObject player;
-    public Book BookUI;
+    public DayCycle dayCycle;
     public Image Image;
     private float fadeDuration = 3;
     enum fadeType { None, FadeIn, FadeOut }
     fadeType fadeMode = fadeType.None;
     float timer = 0;
 
+    // Interface to fade for a given amount of time
     public void fadeToBlack(float fadeTime)
     {
         fadeDuration = fadeTime;
         timer = 0;
         fadeMode = fadeType.FadeIn;
     }
+    // Single time step of fade from a given start to a given end colour
     private void fade(Color start, Color end)
     {
         // Increment timer and update fade colour
@@ -36,26 +37,10 @@ public class Fader : MonoBehaviour
                 break;
             case fadeType.FadeIn:
                 fadeMode = fadeType.FadeOut;
-                player.transform.Rotate(-player.transform.rotation.eulerAngles);
-                CharacterController controller = player.GetComponent<CharacterController>();
-                controller.enabled = false;
-                controller.transform.position = new Vector3(0.13f, 3.5f, -29.0f);
-                controller.enabled = true;
-                player.GetComponent<DayCycle>().exhaustionMeter = 0;
-                PageScript ps;
-                if (BookUI.ActivePage.TryGetComponent<PageScript>(out ps))
-                {
-                    int correct = ps.CheckNumCorrect();
-                    NotifSys.system.notify("Number of correct answers on current page: " + correct, 5);
-                }
-                else
-                {
-                    NotifSys.system.notify("You must rest with an alien's page selected to check your answers!");
-                }
+                dayCycle.EndDay();
                 break;
             case fadeType.FadeOut:
                 fadeMode = fadeType.None;
-                
                 break;
             default:
                 Debug.LogError("INVALID FADEMODE: Fader.fade()");

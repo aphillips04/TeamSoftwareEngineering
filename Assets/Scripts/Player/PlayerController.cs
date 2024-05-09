@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
         
         // Handle exhaustion
         if (dayCycle.exhaustionMeter == 100) { NotifSys.system.notify("You are too tired to perform any more actions!\nYou should rest!"); return; }
-        dayCycle.OnAction();
+        dayCycle.exhaustionMeter += 25;
 
         // Use the active tool with a ray cast forward from camera
         ActiveTool.Use(new Ray(mainCamera.transform.position, mainCamera.transform.forward));

@@ -1578,8 +1578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35ef085c3ae0c804381394f8d85c0b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 648720986}
-  BookUI: {fileID: 1782708005}
+  dayCycle: {fileID: 648720995}
   Image: {fileID: 1322942054}
 --- !u!1 &330045866
 GameObject:
@@ -3906,6 +3905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a973fda4949db1341934d284001b50fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BookUI: {fileID: 1782708005}
   exhaustionMeter: 0
 --- !u!1 &663668629
 GameObject:
