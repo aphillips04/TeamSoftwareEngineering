@@ -41,7 +41,7 @@ public abstract class Alien : MonoBehaviour
     
     public abstract void TryUnlockCombos();
     #endregion
-    // TODO!
+    // Handles moving the alien around its room when its uninterested or the player is not in the room
     protected void DoIdleMovement(Vector3 navDest)
     {
         Vector3 RoomP1 = RoomP1obj.transform.position;
@@ -49,11 +49,12 @@ public abstract class Alien : MonoBehaviour
         // only change desitnation if the alien is close to the current one
         Vector3 playerPos = playerscript.gameObject.transform.position; playerPos.y = 0.08f;
         if (
-            Vector3.Distance(transform.position, navDest) > 3.0f &&
-            Vector3.Distance(playerPos, navDest) > 0.1f &&
-            !(Vector3.Distance(playerPos, transform.position) < 7.0f)
+            Vector3.Distance(transform.position, navDest) > 3.0f && // navDest doesn't store y as it is 2D
+            Vector3.Distance(playerPos, navDest) > 0.1f && // Stops alien getting stuck due to stopping distance when following player
+            !(Vector3.Distance(playerPos, transform.position) < 7.0f) // Stops the alien colliding with the player
         ) return;
         Vector3 idlePos = playerPos;
+        // Until valid position is selected keep generating new points
         while (Math.Abs(playerPos.x - idlePos.x) < 5.0f) idlePos.x = Random.Range(RoomP1.x, RoomP2.x);
         while (Math.Abs(playerPos.z - idlePos.z) < 5.0f) idlePos.z = Random.Range(RoomP2.z, RoomP1.z);
         nav.SetDestination(idlePos);
