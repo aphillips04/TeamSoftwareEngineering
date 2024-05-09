@@ -6298,16 +6298,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.size
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.data[0]
       value: 
-      objectReference: {fileID: 6006524300247969830, guid: 6591f65abbd001f49b43b5c038edf123, type: 3}
+      objectReference: {fileID: 6006524300247969830, guid: 21997317c4f6e51468b6645bbf52a88f, type: 3}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: Combos.Array.data[1]
       value: 
-      objectReference: {fileID: 6006524300247969830, guid: e1474c4a930130347a75311c1e66f9e8, type: 3}
+      objectReference: {fileID: 6006524300247969830, guid: 665ec4a5ac4a2d146a535f821ae86ba4, type: 3}
+    - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: Combos.Array.data[2]
+      value: 
+      objectReference: {fileID: 6006524300247969830, guid: 3e8bfbfba1242924ba60e7a57e5b2bb7, type: 3}
+    - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: Combos.Array.data[3]
+      value: 
+      objectReference: {fileID: 6006524300247969830, guid: fbc71fb74c9e6244bb35186713bbdeef, type: 3}
+    - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: Combos.Array.data[4]
+      value: 
+      objectReference: {fileID: 6006524300247969830, guid: 047572faf222ff34ebc89d6ed1f9f6d3, type: 3}
+    - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
+      propertyPath: Combos.Array.data[5]
+      value: 
+      objectReference: {fileID: 6006524300247969830, guid: bae20957b3be6904199e9a845b047030, type: 3}
     - target: {fileID: 7752257426960636407, guid: 256436f47d5b71e4f81479fd58ec239f, type: 3}
       propertyPath: AllAlienNames.Array.data[0]
       value: Star
@@ -6864,7 +6880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 322}
+  m_AnchoredPosition: {x: -175, y: 320}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1317601373
