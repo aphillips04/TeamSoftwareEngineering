@@ -7,41 +7,37 @@ using Random = UnityEngine.Random;
 
 public class Creeper : Alien
 {
-    #region legacyMembers
+    [Header("References")]
+    private PlayerUIManager UIManager;
+    public Transform PlayerTransform;
+    private GameObject player;
+
+    [Header("Components")]
+    private Animator animator;
+    private SkinnedMeshRenderer EyeRenderer;
+
+    [Header("Constants")]
+    public float baseDistance = 20;
+
+    [Header("State Variables")]
+    public float EmotionDecayRate = 0;
+    public float InterestLevel = 0.5f; // This is a level from -1 to 1, larger absolute values indicate more interest (be that negative or positive interest)
+    public float InterestDecayRate = 1f/16384f; // This determines the rate at which the interest will decay back to neutral
 
     [HideInInspector]
+    // Relationship is calculated from the emotion values.
     public float relationship
     {
         get { return (Emotions[(int)EmotionsEnum.Happiness] + Emotions[(int)EmotionsEnum.Calmness]) / 2; }
         private set { }
     }
-    #endregion
 
-    //private Dictionary<EmotionsEnum, double> Emotions = new Dictionary<EmotionsEnum, double>();
-    //this is a dictionary here but using an enum I suppose you could also assign each one an int value (in the enum) and then it can be a straight array
-    //not entirely sure this is an important implementation decision
-    //but *technically* we don't *need* a dictionary since we only need to store one float per member of the enum and that is all known at compile time
-    //I think i'm just trying to over-optimise (getting a bit c++ brained with arrays vs "real" generic containers)
-
-    private Animator animator;
-    private PlayerUIManager UIManager;
-    public Transform PlayerTransform;
-    public float EmotionDecayRate = 0;
-    public int ToPlayer = 0;
-    public float InterestLevel = 0.5f; // This is a level from -1 to 1, larger absolute values indicate more interest (be that negative or positive interest)
-    public float InterestDecayRate = 1f/16384f; // This determines the rate at which the interest will decay back to neutral
-
-    public float baseDistance = 20;
     #region unityMethods
-    /// <summary>
-    /// Start is the initial setup function, called before the first frame update
-    /// </summary>
-    /// 
-    private GameObject player;
-    private SkinnedMeshRenderer EyeRenderer;
-
+    // Start is the initial setup function, called before the first frame update
     public override void Start()
     {
+        // Find references to Creeper's own components
+        nav = GetComponent<NavMeshAgent>();
         animator = gameObject.GetComponentInChildren<Animator>();
         SkinnedMeshRenderer[] renderCandidates = GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (SkinnedMeshRenderer render in renderCandidates)
@@ -49,7 +45,8 @@ public class Creeper : Alien
             if (render.CompareTag("CreeperEye"))
                 EyeRenderer = render;
         }
-        //THESE NEED MOVING AT SOME POINT
+
+        // Initialise emotion and fatigue values
         Emotions[(int)(EmotionsEnum.Happiness)] =5;
         Emotions[(int)(EmotionsEnum.Calmness)] = 5;
 
@@ -60,77 +57,86 @@ public class Creeper : Alien
            BaseEmotionFatigue[i] = 1.0f;
         }
         Array.Copy(BaseEmotionFatigue, EmotionFatigue, BaseEmotionFatigue.Length);
-        nav = GetComponent<NavMeshAgent>();
+        
 
+        // Find references to external components
         player = GameObject.FindGameObjectWithTag("Player");
         playerscript = player.GetComponent<PlayerController>();
         book = BookUI.GetComponent<Book>();
-        // Wait until player ui manager is ready
         UIManager = player.GetComponentInChildren<PlayerUIManager>();
-        //relationship bar needs to be sorted (i think removed idk)
-        UIManager.InitRelationshipBar();
-        //UIManager.SetExhaustionBar(relationship);
-        currentAction = Idle;
     }
-
-    /// <summary>
-    /// Update is the objects game loop function, called once per frame
-    /// </summary>
+    // Update is the object's game loop function, called once per frame
     public override void Update()
     {
         // Set the speed of the alien based on its happiness
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
-        //Debug.Log(nav.speed); default is 3.5
         if (happiness >= (20.0f / 3.0f)) { 
+            // If it is very happy sit down
             animator.SetBool("Sitting", true);
             nav.speed = 0;
         }
         else
         {
+            // Otherwise decrease the speed with high happiness
             animator.SetBool("Sitting", false);
             nav.speed = 7 - ((happiness / 10.0f) * 7);
         }
+
+        // Set the eye colour of the alien based on its calmness
         float calmness = Emotions[(int)EmotionsEnum.Calmness];
         Color eyeColour = Color.Lerp(Color.red, Color.white, calmness / 10.0f);
         EyeRenderer.material.color = eyeColour;
 
-        // Set the eye colour of the alien based on its calmness
+        
 
-
+        // Reduce the emotion values and the fatigue from repeated actions to a baseline level
         DecayEmotions(ref Emotions, BaseEmotions, EmotionDecayRate);
         DecayEmotions(ref EmotionFatigue,  BaseEmotionFatigue,  FatigueDecayRate);
 
+        // If the alien is interested in the player and can see the player -- look at the player
         if (Math.Abs(InterestLevel) > 0.3 && InCreeperRoom()) transform.LookAt(player.transform.position);
     }
+    // FixedUpdate is an alternative update, called once per tick at a fixed rate
     void FixedUpdate()
     {
+        // TODO!
         InterestLevel += InterestLevel == 0 ? 0 : (InterestLevel < 0 ? InterestDecayRate : -InterestDecayRate);
         if (Math.Abs(InterestLevel) < 0.3 && !lostInterest) { lostInterest = true; nav.SetDestination(PlayerTransform.position); }
         else if (Math.Abs(InterestLevel) > 0.3 && lostInterest) lostInterest = false;
 
         if (Math.Abs(InterestLevel) < 0.3 || !InCreeperRoom()) DoIdleMovement(nav.destination); // RoomP1 = (47.5, 0, 46.5) RoomP2 = (-18.5, 0, 22.5)
-        else DoPlayerDistance();
-        MoveToDestination();
+        else
+        {
+            // Move to a point defined by the player's positon
+            DoPlayerDistance();
+            MoveFromPlayer();
+        }
     }
     #endregion
+    // Set the distance away from the player the Creeper will stay
     void DoPlayerDistance()
     {
+        // Walk towards the player and stop a certain distance away
         nav.SetDestination(PlayerTransform.position);
         nav.stoppingDistance = baseDistance - relationship + playersTool();
     }
-    void MoveToDestination()
+    // Move away from the player if the Creeper is too close
+    void MoveFromPlayer()
     {
         Vector3 ToPlayer = player.transform.position - transform.position;
+        // If the stopping distance is bigger than the current distance
         if (Vector3.Magnitude(ToPlayer) < nav.stoppingDistance - 1)
         {
+            // Move away
             Vector3 targetPosition = ToPlayer.normalized * nav.stoppingDistance * -2;
             nav.destination = targetPosition;
         }
     }
-    #region BobSpinRoom
+    #region Room
+    // Check if the player is in the Creeper's room
     bool InCreeperRoom()
     {
-        // FOR EVERY ALIEN INCREASE X VALUE BY 33.7
+        // The rooms are 33.7 units away from each other on the X axis
         return (
             -15.2 < player.transform.position.x && player.transform.position.x < 16.8 // Ensure player is in the correct x range
         ) && (
@@ -139,12 +145,13 @@ public class Creeper : Alien
     }
     #endregion
 
-    
+
     #region Virtuals
-    //From parent clas
+    // React to the tool that was used by the player
     override public void React(Tool tool)
     {
         Debug.Log(string.Format("reacted to {0}", tool.toolType));
+        // Update emotions based on Star's preferences to the different interactions
         if (tool.toolType == Tools.Touch_Gently)
         {
             UpdateEmotion(EmotionsEnum.Happiness, -1);
@@ -161,13 +168,11 @@ public class Creeper : Alien
         {
             UpdateEmotion(EmotionsEnum.Calmness, 1);
         }
-        else if (tool.toolType == Tools.Item_Oscilliscope)
-        {
-        }
+        else if (tool.toolType == Tools.Item_Oscilliscope) { } // This is an unused tool type
+        // Update the interest value as a tool has been used 
         UpdateInterest(tool.toolType);
-        // Update the UI
-        //UIManager.UpdateExhaustionBar(relationship);
     }
+    // TODO!
     protected override void UpdateInterest(Tools type)
     {
         if (type == Tools.Touch_Gently || type == Tools.Feed_Treat)
@@ -183,93 +188,40 @@ public class Creeper : Alien
         if (InterestLevel > 1) InterestLevel = 1;
         else if (InterestLevel < -1) InterestLevel = -1;
     }
+    // Show combos in the book if their emotion states have been seen
     public override void TryUnlockCombos()
     {
         float happiness = Emotions[(int)EmotionsEnum.Happiness];
         float calmness = Emotions[(int)EmotionsEnum.Calmness];
+
+        // Checking emotion boundaries for all combo cases
         if (happiness > (20.0f / 3.0f))
         {
-            //if happiness high
             myPage.ActivateCombo("HappyHigh");
 
         }
         else if ((happiness < (20.0f / 3.0f)) || (happiness > (10.0f / 3.0f)))
         {
-            //happiness middle
             myPage.ActivateCombo("HappyMid");
         }
         else if (happiness < (10.0f / 3.0f))
         {
-            //happiness low
             myPage.ActivateCombo("HappyLow");
         }
 
         if (calmness > (20.0f / 3.0f))
         {
-            //if calmness high
             myPage.ActivateCombo("CalmHigh");
 
         }
         else if ((calmness < (20.0f / 3.0f)) || (calmness > (10.0f / 3.0f)))
         {
-            //calmness middle
             myPage.ActivateCombo("CalmMid");
         }
         else if (calmness < (10.0f / 3.0f))
         {
-            //calmness low
-
             myPage.ActivateCombo("CalmLow");
         }
     }
-    protected override void InitActions()
-    {
-        throw new NotImplementedException();
-    }
-    protected override void UpdateWeights()
-    {
-        throw new NotImplementedException();
-    }
-    #endregion
-
-    /// <summary>
-    /// How the alien responds to the players action
-    /// </summary>
-
-    protected override void UpdateEmotions()
-    {
-        //Emotions[(int)EmotionsEnum.Happiness] = 1234;
-       // Emotions[(int)EmotionsEnum.Calmness] = 2345;
-    }
-
-    private void UpdateEmotionFatigue()
-    {
-
-    }
-    //down here we need actions
-    //we will also need some way to vary the mood randomly based on the day
-    //perhaps with some sort of carryover based on previous day behaviour
-
-    #region actions
-    bool Idle()
-    {
-        const float IdleTimerMin = 1.0f;
-        const float IdleTimerMax = 5.0f;
-        
-        if (needNewAction) // on first call - set yourself as the active action
-        { 
-            actionTimer = Random.Range(IdleTimerMin, IdleTimerMax); // timer between 0 and 5 seconds
-            needNewAction = false;
-            currentAction = Idle;
-        }
-        //when timer up return true
-        if (actionTimer > IdleTimerMax)
-        {
-            return true;//returning true tells update that we need a new action
-        }
-        //idle does nothing
-        actionTimer += Time.deltaTime;
-        return false;
-    }
-    #endregion
 }
+#endregion

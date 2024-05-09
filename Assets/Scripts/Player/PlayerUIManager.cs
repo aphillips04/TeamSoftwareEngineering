@@ -43,6 +43,7 @@ public class PlayerUIManager : MonoBehaviour
         cycle = GetComponent<DayCycle>();
         //Debug.Log("Hello World!");
         MainUI.enabled = true;
+        InitExhaustionBar();
         SetExhaustionBar(cycle.exhaustionMeter);
 
         ToggleUI();
@@ -83,11 +84,12 @@ public class PlayerUIManager : MonoBehaviour
         for (int i = 0; i < HotbarCount; i++)
             Hotbar[i].transform.localPosition = HotbarTransform.transform.localPosition + new Vector3(HotbarStart + BoxWidth * i, 0,0);
     }
-    public void InitRelationshipBar()
+    // Create exhaustion bar on UI
+    public void InitExhaustionBar()
     {
         Color background = new Color(.267f, .267f, .267f);
         Color fill = Color.white;
-
+        // Instantiate and colour progress bar on UI
         GameObject bar = Instantiate(ProgressBarPrefab, MainUI.transform);
         foreach (Image child in bar.GetComponentsInChildren<Image>())
         {
@@ -104,19 +106,19 @@ public class PlayerUIManager : MonoBehaviour
                     break;
             }
         }
-        if (ExhaustionFill == null)
-        {
-            Debug.LogError("RelationshipFill is null");
-        }
+        if (ExhaustionFill == null) Debug.LogError("ExhaustionFill is null");
+        
     }
+    // Update the value displayed by the exhaustion bar
     public void UpdateExhaustionBar(float exhaustion)
     {
-        //Debug.Log(exhaustion);
         targetFill = (float)Math.Round(exhaustion / 100, 2, MidpointRounding.AwayFromZero);
     }
+    // Intially set the value displayed by the exhaustion bar
     public void SetExhaustionBar(float exhaustion)
     {
         targetFill = (float)Math.Round(exhaustion / 100, 2, MidpointRounding.AwayFromZero);
+        // Forcibly set the fill to the target fill - skipping the animation
         ExhaustionFill.fillAmount = targetFill;
     }
     // Update variables related to which UI is currently active
