@@ -32,14 +32,19 @@ public class PlayerUIManager : MonoBehaviour
 
     [Header("Progress Bar")]
     public GameObject ProgressBarPrefab;
-    private Image RelationshipFill;
+    public float ProgressSpeed = 0.1f;
+    private Image ExhaustionFill;
     private float targetFill;
     private bool CursorLock = true;
+    private DayCycle cycle;
     // Start is called before the first frame update
     void Start()
     {
+        cycle = GetComponent<DayCycle>();
         //Debug.Log("Hello World!");
         MainUI.enabled = true;
+        SetExhaustionBar(cycle.exhaustionMeter);
+
         ToggleUI();
     }
 
@@ -48,9 +53,9 @@ public class PlayerUIManager : MonoBehaviour
     {
         // Update hotbar
         DrawHotbar();
-
-        if (RelationshipFill.fillAmount < targetFill) RelationshipFill.fillAmount += 0.1f * Time.deltaTime;
-        else if (RelationshipFill.fillAmount > targetFill) RelationshipFill.fillAmount -= 0.1f * Time.deltaTime;
+        UpdateExhaustionBar( 100 - cycle.exhaustionMeter);
+        if (ExhaustionFill.fillAmount < targetFill) ExhaustionFill.fillAmount += ProgressSpeed * Time.deltaTime;
+        else if (ExhaustionFill.fillAmount > targetFill) ExhaustionFill.fillAmount -= ProgressSpeed * Time.deltaTime;
     }
     // Create hotbar cell for each tool in inventory
     public void InitHotbar()
@@ -92,27 +97,27 @@ public class PlayerUIManager : MonoBehaviour
                     child.color = background;
                     break;
                 case "Fill":
-                    RelationshipFill = child;
+                    ExhaustionFill = child;
                     child.color = fill;
                     break;
                 default:
                     break;
             }
         }
-        if (RelationshipFill == null)
+        if (ExhaustionFill == null)
         {
             Debug.LogError("RelationshipFill is null");
         }
     }
-    public void UpdateRelationshipBar(float relationship)
+    public void UpdateExhaustionBar(float exhaustion)
     {
-        //Debug.Log(relationship);
-        targetFill = (float)Math.Round(relationship / 10, 2, MidpointRounding.AwayFromZero);
+        //Debug.Log(exhaustion);
+        targetFill = (float)Math.Round(exhaustion / 100, 2, MidpointRounding.AwayFromZero);
     }
-    public void SetRelationshipBar(float relationship)
+    public void SetExhaustionBar(float exhaustion)
     {
-        targetFill = (float)Math.Round(relationship / 10, 2, MidpointRounding.AwayFromZero);
-        RelationshipFill.fillAmount = targetFill;
+        targetFill = (float)Math.Round(exhaustion / 100, 2, MidpointRounding.AwayFromZero);
+        ExhaustionFill.fillAmount = targetFill;
     }
     // Update variables related to which UI is currently active
     public void ToggleUI()

@@ -68,7 +68,7 @@ public class StarAlien : Alien
         UIManager = player.GetComponentInChildren<PlayerUIManager>();
         //relationship bar needs to be sorted (i think removed idk)
         UIManager.InitRelationshipBar();
-        UIManager.SetRelationshipBar(relationship);
+       // UIManager.SetExhaustionBar(relationship);
         currentAction = Idle;
     }
 
@@ -173,7 +173,7 @@ public class StarAlien : Alien
         }
         UpdateInterest(tool.toolType);
         // Update the UI
-        UIManager.UpdateRelationshipBar(relationship);
+       // UIManager.UpdateExhaustionBar(relationship);
     }
     protected override void UpdateInterest(Tools type)
     {
